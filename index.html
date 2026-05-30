@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sim Số Đẹp - Mua Bán Sim Số Đẹp Toàn Quốc</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #e31c23;
+  --red-dark: #b8151b;
+  --red-light: #ff3a42;
+  --gold: #f5a623;
+  --gold-light: #ffd166;
+  --dark: #0f0f0f;
+  --dark2: #1a1a1a;
+  --dark3: #222;
+  --gray: #444;
+  --gray-light: #888;
+  --border: #2a2a2a;
+  --text: #e8e8e8;
+  --text-dim: #aaa;
+  --bg: #141414;
+  --card: #1c1c1c;
+  --card2: #202020;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  background: var(--dark);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.topbar-inner {
+  max-width: 1300px; margin: 0 auto; padding: 0 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.topbar a { color: var(--text-dim); text-decoration: none; }
+.topbar a:hover { color: var(--gold); }
+.topbar-right { display: flex; gap: 16px; align-items: center; }
+.hotline-top { color: var(--gold); font-weight: 700; font-size: 13px; }
+
+/* ===== HEADER ===== */
+header {
+  background: var(--dark2);
+  border-bottom: 2px solid var(--red);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px rgba(227,28,35,0.2);
+}
+.header-inner {
+  max-width: 1300px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; gap: 32px; height: 64px;
+}
+.logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 26px; font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  white-space: nowrap;
+}
+.logo-icon {
+  width: 40px; height: 40px; background: var(--red);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo span { color: var(--red); }
+
+nav { display: flex; gap: 4px; flex: 1; }
+nav a {
+  color: var(--text-dim); text-decoration: none;
+  padding: 8px 14px; border-radius: 6px;
+  font-size: 14px; font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+nav a:hover, nav a.active { color: #fff; background: rgba(227,28,35,0.15); }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.btn-cart {
+  background: var(--red); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 8px 16px; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s; font-family: inherit;
+}
+.btn-cart:hover { background: var(--red-dark); transform: translateY(-1px); }
+.cart-badge {
+  background: var(--gold); color: var(--dark);
+  border-radius: 50%; width: 18px; height: 18px;
+  font-size: 10px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a0505 50%, #0f0f0f 100%);
+  padding: 48px 20px 40px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(227,28,35,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 50%, rgba(245,166,35,0.06) 0%, transparent 60%);
+}
+.hero-inner { max-width: 1300px; margin: 0 auto; position: relative; }
+.hero-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700; color: #fff;
+  line-height: 1.1; margin-bottom: 8px;
+}
+.hero-title span { color: var(--red); }
+.hero-sub { color: var(--text-dim); font-size: 15px; margin-bottom: 28px; }
+
+/* Search Bar */
+.search-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.search-row {
+  display: flex; gap: 12px; align-items: stretch;
+  flex-wrap: wrap;
+}
+.search-input-wrap { flex: 1; min-width: 220px; position: relative; }
+.search-input {
+  width: 100%;
+  background: var(--dark3); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 13px 18px 13px 44px;
+  color: #fff; font-size: 15px; font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.search-input:focus { border-color: var(--red); }
+.search-input::placeholder { color: var(--gray-light); }
+.search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--gray-light); font-size: 16px;
+}
+.btn-search {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  color: #fff; border: none; border-radius: 10px;
+  padding: 13px 28px; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.2s; white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(227,28,35,0.3);
+}
+.btn-search:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227,28,35,0.4); }
+
+.quick-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.tag {
+  background: var(--dark3); border: 1px solid var(--border);
+  color: var(--text-dim); border-radius: 20px;
+  padding: 5px 14px; font-size: 12px; cursor: pointer;
+  transition: all 0.2s;
+}
+.tag:hover { border-color: var(--red); color: var(--red); }
+
+/* Stats */
+.stats-row {
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.stat-item { display: flex; align-items: center; gap: 8px; }
+.stat-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--gold);
+}
+.stat-label { font-size: 12px; color: var(--text-dim); }
+
+/* ===== MAIN LAYOUT ===== */
+.main-wrap { max-width: 1300px; margin: 0 auto; padding: 28px 20px; display: flex; gap: 24px; }
+
+/* ===== SIDEBAR ===== */
+.sidebar { width: 240px; flex-shrink: 0; }
+.sidebar-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+}
+.sidebar-head {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  padding: 12px 16px;
+  font-size: 13px; font-weight: 700; color: #fff;
+  display: flex; align-items: center; gap: 8px;
+}
+.sidebar-body { padding: 12px; }
+.filter-group { margin-bottom: 16px; }
+.filter-label { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.filter-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.f-btn {
+  background: var(--dark3); border: 1px solid var(--border);
+  color: var(--text-dim); border-radius: 6px;
+  padding: 5px 10px; font-size: 11px; cursor: pointer;
+  transition: all 0.15s; font-family: inherit;
+}
+.f-btn:hover, .f-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+.cat-list { list-style: none; }
+.cat-list li a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 8px; color: var(--text-dim);
+  text-decoration: none; font-size: 12.5px;
+  border-radius: 6px; transition: all 0.15s;
+}
+.cat-list li a:hover { background: rgba(227,28,35,0.1); color: var(--red); }
+.cat-badge {
+  background: var(--dark3); color: var(--gray-light);
+  font-size: 10px; padding: 2px 6px; border-radius: 10px;
+}
+
+/* ===== CONTENT ===== */
+.content { flex: 1; min-width: 0; }
+
+/* Toolbar */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; flex-wrap: wrap; gap: 12px;
+}
+.result-count { font-size: 14px; color: var(--text-dim); }
+.result-count strong { color: var(--gold); font-size: 16px; }
+.sort-wrap { display: flex; gap: 8px; align-items: center; }
+.sort-label { font-size: 13px; color: var(--text-dim); }
+.sort-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text-dim); border-radius: 6px;
+  padding: 6px 14px; font-size: 12px; cursor: pointer;
+  transition: all 0.15s; font-family: inherit;
+}
+.sort-btn:hover, .sort-btn.active { border-color: var(--red); color: var(--red); }
+
+/* Admin Upload Bar */
+.upload-bar {
+  background: linear-gradient(135deg, #1a1a00, #1a0a00);
+  border: 1px solid var(--gold);
+  border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.upload-bar-icon { font-size: 24px; }
+.upload-bar-text { flex: 1; }
+.upload-bar-text h4 { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 2px; }
+.upload-bar-text p { font-size: 12px; color: var(--text-dim); }
+.btn-upload-trigger {
+  background: linear-gradient(135deg, var(--gold), #e8960f);
+  color: var(--dark); border: none; border-radius: 8px;
+  padding: 9px 20px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-upload-trigger:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,166,35,0.3); }
+
+/* Upload Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  z-index: 1000; display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; width: 100%; max-width: 560px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  animation: modalIn 0.25s ease;
+}
+@keyframes modalIn { from { transform: scale(0.95) translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-head {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  padding: 18px 24px; border-radius: 16px 16px 0 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-head h3 { font-size: 17px; font-weight: 700; color: #fff; }
+.modal-close {
+  background: rgba(255,255,255,0.2); border: none; color: #fff;
+  width: 30px; height: 30px; border-radius: 50%;
+  cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+}
+.modal-body { padding: 24px; }
+
+.drop-zone {
+  border: 2px dashed var(--gray);
+  border-radius: 12px; padding: 40px 20px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; position: relative;
+  background: var(--dark3);
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--red); background: rgba(227,28,35,0.05);
+}
+.drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.drop-icon { font-size: 44px; margin-bottom: 12px; }
+.drop-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.drop-sub { font-size: 13px; color: var(--text-dim); }
+.drop-formats { font-size: 11px; color: var(--gray-light); margin-top: 8px; }
+
+.upload-format-guide {
+  background: var(--dark3); border-radius: 10px; padding: 14px; margin-top: 16px;
+}
+.upload-format-guide h5 { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
+.format-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.format-table th { color: var(--text-dim); text-align: left; padding: 4px 8px; font-weight: 600; }
+.format-table td { color: var(--text); padding: 4px 8px; border-top: 1px solid var(--border); }
+.format-tag { background: var(--red); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+
+.upload-progress { margin-top: 16px; display: none; }
+.progress-bar-wrap { background: var(--dark3); border-radius: 20px; height: 6px; overflow: hidden; }
+.progress-bar { background: linear-gradient(90deg, var(--red), var(--gold)); height: 100%; border-radius: 20px; width: 0; transition: width 0.3s; }
+.progress-text { font-size: 12px; color: var(--text-dim); margin-top: 6px; text-align: center; }
+
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+.btn-cancel {
+  background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+  padding: 9px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px;
+}
+.btn-confirm {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  border: none; color: #fff;
+  padding: 9px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700;
+}
+
+/* SIM GRID */
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 14px;
+}
+
+.sim-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  transition: all 0.22s; cursor: pointer;
+  position: relative;
+}
+.sim-card:hover {
+  border-color: var(--red);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(227,28,35,0.18);
+}
+
+.sim-badge {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 9px; font-weight: 800; padding: 3px 7px;
+  border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.badge-vip { background: linear-gradient(135deg, #7b2ff7, #5a1bc4); color: #fff; }
+.badge-hot { background: linear-gradient(135deg, var(--red), #ff6b6b); color: #fff; }
+.badge-new { background: linear-gradient(135deg, #00b894, #00897b); color: #fff; }
+.badge-sale { background: linear-gradient(135deg, var(--gold), #e8960f); color: var(--dark); }
+
+.sim-net {
+  padding: 10px 14px 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.net-logo {
+  width: 26px; height: 26px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; color: #fff;
+}
+.net-viettel { background: linear-gradient(135deg, #1565c0, #0d47a1); }
+.net-vinaphone { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+.net-mobifone { background: linear-gradient(135deg, #c62828, #b71c1c); }
+.net-vietnamobile { background: linear-gradient(135deg, #6a1b9a, #4a148c); }
+.net-name { font-size: 11px; color: var(--text-dim); font-weight: 500; }
+
+.sim-number {
+  padding: 6px 14px 8px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px; font-weight: 600; color: #fff;
+  letter-spacing: 2px;
+}
+.sim-number .highlight { color: var(--red); }
+
+.sim-tags { padding: 0 14px 10px; display: flex; flex-wrap: wrap; gap: 4px; }
+.sim-tag {
+  font-size: 10px; padding: 2px 7px; border-radius: 10px;
+  background: rgba(255,255,255,0.07); color: var(--text-dim);
+}
+
+.sim-footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sim-price { font-size: 15px; font-weight: 800; color: var(--gold); }
+.sim-price-old { font-size: 11px; color: var(--gray-light); text-decoration: line-through; margin-right: 4px; }
+.btn-buy {
+  background: var(--red); color: #fff;
+  border: none; border-radius: 6px;
+  padding: 6px 12px; font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.btn-buy:hover { background: var(--red-dark); }
+
+/* Pagination */
+.pagination { display: flex; gap: 8px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+.pg-btn {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text-dim); width: 36px; height: 36px;
+  border-radius: 8px; cursor: pointer; font-size: 13px;
+  transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+  font-family: inherit;
+}
+.pg-btn:hover, .pg-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 10px; padding: 14px 18px;
+  font-size: 13px; color: var(--text);
+  z-index: 2000; transform: translateX(120%);
+  transition: transform 0.3s ease;
+  max-width: 300px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show { transform: translateX(0); }
+.toast strong { color: var(--gold); }
+
+/* Cart Drawer */
+.cart-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 360px;
+  background: var(--dark2); border-left: 1px solid var(--border);
+  z-index: 500; transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: flex; flex-direction: column;
+}
+.cart-drawer.open { transform: translateX(0); }
+.cart-head {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  padding: 20px; display: flex; align-items: center; justify-content: space-between;
+}
+.cart-head h3 { color: #fff; font-size: 17px; font-weight: 700; }
+.cart-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px; }
+.cart-empty { text-align: center; padding: 40px; color: var(--text-dim); }
+.cart-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+}
+.cart-num { font-family: 'Oswald', sans-serif; font-size: 18px; letter-spacing: 1px; color: #fff; }
+.cart-price { color: var(--gold); font-weight: 700; font-size: 14px; }
+.cart-remove { background: transparent; border: 1px solid var(--border); color: var(--gray-light); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.cart-foot { padding: 16px; border-top: 1px solid var(--border); }
+.cart-total { font-size: 14px; color: var(--text-dim); margin-bottom: 12px; display: flex; justify-content: space-between; }
+.cart-total strong { color: var(--gold); font-size: 18px; }
+.btn-checkout { width: 100%; background: linear-gradient(135deg, var(--red), var(--red-dark)); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+/* Footer */
+footer {
+  background: var(--dark); border-top: 1px solid var(--border);
+  padding: 40px 20px 24px;
+  margin-top: 40px;
+}
+.footer-inner { max-width: 1300px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+.footer-brand .logo { margin-bottom: 12px; display: inline-flex; }
+.footer-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.footer-hotline { font-family: 'Oswald', sans-serif; font-size: 26px; color: var(--gold); font-weight: 700; margin-top: 10px; }
+.footer-col h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul li a { font-size: 13px; color: var(--text-dim); text-decoration: none; }
+.footer-col ul li a:hover { color: var(--red); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; text-align: center; font-size: 12px; color: var(--gray-light); }
+
+/* File list */
+.file-list-item {
+  background: var(--dark3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; margin-top: 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.file-icon { font-size: 20px; }
+.file-info { flex: 1; }
+.file-name { font-size: 13px; font-weight: 600; color: #fff; }
+.file-size { font-size: 11px; color: var(--text-dim); }
+.file-remove { background: transparent; border: 1px solid var(--border); color: var(--gray-light); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+
+/* Shake animation */
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+/* Responsive */
+@media(max-width:900px) {
+  .sidebar { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:600px) {
+  .header-inner { gap: 12px; }
+  nav { display: none; }
+  .hero { padding: 28px 16px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .cart-drawer { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>📍 Giao sim toàn quốc · Hỗ trợ 8h - 22h mỗi ngày</div>
+    <div class="topbar-right">
+      <span>Cộng tác viên</span>
+      <span>|</span>
+      <span id="topbarLoginBtn" style="cursor:pointer" onclick="openLoginModal()">🔐 Đăng nhập Admin</span>
+      <span id="topbarAdminInfo" style="display:none;align-items:center;gap:8px">
+        <span style="color:#4caf50;font-weight:700">🛡️ Admin</span>
+        <span style="cursor:pointer" onclick="doLogout()">Đăng xuất</span>
+      </span>
+      <span>|</span>
+      <span class="hotline-top">📞 0916 737 888</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">📱</div>
+      Sim<span>Đẹp</span>
+    </a>
+    <nav>
+      <a href="#" class="active">Tìm Sim</a>
+      <a href="#">Giới thiệu</a>
+      <a href="#">Hướng dẫn</a>
+      <a href="#">Kiến thức</a>
+      <a href="#">Phong Thủy</a>
+      <a href="#">Liên hệ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-cart" onclick="toggleCart()">
+        🛒 Giỏ hàng
+        <div class="cart-badge" id="cartCount">0</div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">Kho Sim Số Đẹp<br><span>Lớn Nhất Việt Nam</span></h1>
+    <p class="hero-sub">Hơn 50,000 sim số đẹp · Viettel · Vinaphone · Mobifone · Vietnamobile</p>
+
+    <div class="search-wrap">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="searchInput"
+            placeholder="Nhập số cần tìm, VD: *88, 0912*, *1991..." />
+        </div>
+        <button class="btn-search" onclick="doSearch()">Tìm Sim</button>
+      </div>
+      <div class="quick-tags">
+        <span>Tìm nhanh:</span>
+        <span class="tag" onclick="setSearch('*88')">*88</span>
+        <span class="tag" onclick="setSearch('*999')">*999</span>
+        <span class="tag" onclick="setSearch('*68')">Lộc Phát *68</span>
+        <span class="tag" onclick="setSearch('*86')">*86</span>
+        <span class="tag" onclick="setSearch('*1991')">Năm sinh *1991</span>
+        <span class="tag" onclick="setSearch('*8888')">Tứ Quý 8</span>
+        <span class="tag" onclick="setSearch('*6868')">*6868</span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num" id="totalCount">27,374</div>
+        <div class="stat-label">sim đang bán</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50K+</div>
+        <div class="stat-label">khách hàng</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">chính hãng</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">hỗ trợ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-head">🏷️ Theo nhà mạng</div>
+      <div class="sidebar-body">
+        <div class="filter-btns">
+          <button class="f-btn active" onclick="filterNet(this,'all')">Tất cả</button>
+          <button class="f-btn" onclick="filterNet(this,'Viettel')">Viettel</button>
+          <button class="f-btn" onclick="filterNet(this,'Vinaphone')">Vina</button>
+          <button class="f-btn" onclick="filterNet(this,'Mobifone')">Mobi</button>
+          <button class="f-btn" onclick="filterNet(this,'Vietnamobile')">VN Mobile</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-box">
+      <div class="sidebar-head">📂 Danh mục sim</div>
+      <div class="sidebar-body" style="padding:8px 0">
+        <ul class="cat-list" id="catList">
+          <li><a href="#" onclick="filterCat(event,'')">Tất cả <span class="cat-badge" id="cb-all">—</span></a></li>
+          <li><a href="#" onclick="filterCat(event,'VIP')">Sim V.I.P <span class="cat-badge">★</span></a></li>
+          <li><a href="#" onclick="filterCat(event,'Tam Hoa')">Tam Hoa</a></li>
+          <li><a href="#" onclick="filterCat(event,'Tứ Quý')">Tứ Quý</a></li>
+          <li><a href="#" onclick="filterCat(event,'Ngũ Quý')">Ngũ Quý</a></li>
+          <li><a href="#" onclick="filterCat(event,'Lục Quý')">Lục Quý</a></li>
+          <li><a href="#" onclick="filterCat(event,'Lộc Phát')">Lộc Phát</a></li>
+          <li><a href="#" onclick="filterCat(event,'Thần Tài')">Thần Tài</a></li>
+          <li><a href="#" onclick="filterCat(event,'Số lặp')">Số lặp</a></li>
+          <li><a href="#" onclick="filterCat(event,'Sảnh tiến')">Sảnh tiến</a></li>
+          <li><a href="#" onclick="filterCat(event,'Năm sinh')">Năm sinh</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sidebar-box">
+      <div class="sidebar-head">💰 Khoảng giá</div>
+      <div class="sidebar-body">
+        <div class="filter-btns">
+          <button class="f-btn active" onclick="filterPrice(this,0,999999999)">Tất cả</button>
+          <button class="f-btn" onclick="filterPrice(this,0,500000)">≤ 500K</button>
+          <button class="f-btn" onclick="filterPrice(this,500000,1000000)">500K-1tr</button>
+          <button class="f-btn" onclick="filterPrice(this,1000000,3000000)">1-3 triệu</button>
+          <button class="f-btn" onclick="filterPrice(this,3000000,10000000)">3-10 triệu</button>
+          <button class="f-btn" onclick="filterPrice(this,10000000,999999999)">≥ 10 triệu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- Upload bar (Admin only) -->
+    <div class="upload-bar" id="uploadBar" style="display:none">
+      <div class="upload-bar-icon">📊</div>
+      <div class="upload-bar-text">
+        <h4>🛡️ Cập nhật bảng số mới <span style="font-size:10px;background:#4caf50;color:#fff;padding:2px 7px;border-radius:10px;margin-left:6px">ADMIN</span></h4>
+        <p>Upload file Excel (.xlsx) hoặc CSV chứa danh sách sim mới</p>
+      </div>
+      <button class="btn-upload-trigger" onclick="openUploadModal()">
+        ⬆️ Upload bảng số
+      </button>
+    </div>
+    <!-- Login CTA for non-admin -->
+    <div class="upload-bar" id="loginCta" style="background:linear-gradient(135deg,#0a0a1a,#0d0d0d);border-color:var(--border)">
+      <div class="upload-bar-icon">🔐</div>
+      <div class="upload-bar-text">
+        <h4 style="color:var(--text-dim)">Bạn là Admin?</h4>
+        <p>Đăng nhập để upload và quản lý bảng số sim</p>
+      </div>
+      <button class="btn-upload-trigger" style="background:linear-gradient(135deg,#333,#222);color:var(--text-dim);box-shadow:none" onclick="openLoginModal()">
+        🔐 Đăng nhập
+      </button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="result-count">Tìm thấy <strong id="foundCount">0</strong> sim</div>
+      <div class="sort-wrap">
+        <span class="sort-label">Sắp xếp:</span>
+        <button class="sort-btn active" onclick="sortSims(this,'none')">Mặc định</button>
+        <button class="sort-btn" onclick="sortSims(this,'asc')">Giá thấp</button>
+        <button class="sort-btn" onclick="sortSims(this,'desc')">Giá cao</button>
+      </div>
+    </div>
+
+    <!-- Sim Grid -->
+    <div class="sim-grid" id="simGrid"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon">📱</div>
+          Sim<span>Đẹp</span>
+        </a>
+        <p class="footer-desc">Chuyên cung cấp sim số đẹp, sim phong thủy chính hãng các mạng Viettel, Vinaphone, Mobifone, Vietnamobile. Giao hàng toàn quốc, cam kết chính hãng 100%.</p>
+        <div class="footer-hotline">0916 737 888</div>
+      </div>
+      <div class="footer-col">
+        <h4>Danh mục</h4>
+        <ul>
+          <li><a href="#">Sim V.I.P</a></li>
+          <li><a href="#">Tứ Quý</a></li>
+          <li><a href="#">Tam Hoa</a></li>
+          <li><a href="#">Lộc Phát</a></li>
+          <li><a href="#">Thần Tài</a></li>
+          <li><a href="#">Năm sinh</a></li>
+          <li><a href="#">Phong Thủy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Hỗ trợ</h4>
+        <ul>
+          <li><a href="#">Hướng dẫn mua sim</a></li>
+          <li><a href="#">Chính sách giao hàng</a></li>
+          <li><a href="#">Chính sách đổi trả</a></li>
+          <li><a href="#">Chính sách bảo mật</a></li>
+          <li><a href="#">Điều khoản sử dụng</a></li>
+          <li><a href="#">Cộng tác viên</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Công ty</h4>
+        <ul>
+          <li><a href="#">Giới thiệu</a></li>
+          <li><a href="#">Tin tức</a></li>
+          <li><a href="#">Kiến thức sim</a></li>
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Tuyển dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 SimĐẹp · Công ty TNHH Viễn thông Số Đẹp · MST: 0123456789
+    </div>
+  </div>
+</footer>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📊 Upload Bảng Số Sim Mới</h3>
+      <button class="modal-close" onclick="closeUploadModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.txt" onchange="handleFileSelect(this)">
+        <div class="drop-icon">📂</div>
+        <div class="drop-title">Kéo thả file vào đây</div>
+        <div class="drop-sub">hoặc click để chọn file</div>
+        <div class="drop-formats">Hỗ trợ: .xlsx · .xls · .csv · .txt</div>
+      </div>
+
+      <div id="fileListWrap"></div>
+
+      <div class="upload-format-guide">
+        <h5>📋 Định dạng file hợp lệ</h5>
+        <table class="format-table">
+          <tr>
+            <th>Cột</th><th>Tên cột</th><th>Ví dụ</th><th>Bắt buộc</th>
+          </tr>
+          <tr>
+            <td>A</td><td>Số điện thoại</td><td>0912345678</td><td><span class="format-tag">Bắt buộc</span></td>
+          </tr>
+          <tr>
+            <td>B</td><td>Nhà mạng</td><td>Viettel</td><td><span class="format-tag">Bắt buộc</span></td>
+          </tr>
+          <tr>
+            <td>C</td><td>Giá bán</td><td>500000</td><td><span class="format-tag">Bắt buộc</span></td>
+          </tr>
+          <tr>
+            <td>D</td><td>Danh mục</td><td>Tam Hoa</td><td>Tùy chọn</td>
+          </tr>
+          <tr>
+            <td>E</td><td>Gói cước</td><td>Trả trước</td><td>Tùy chọn</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="upload-progress" id="uploadProgress">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Đang xử lý...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeUploadModal()">Hủy</button>
+      <button class="btn-confirm" id="btnConfirmUpload" onclick="confirmUpload()" disabled>⬆️ Xác nhận Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+      <h3>🔐 Đăng nhập Admin</h3>
+      <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:10px">🛡️</div>
+        <div style="font-size:13px;color:var(--text-dim)">Khu vực quản trị · Chỉ dành cho Admin</div>
+      </div>
+      <div style="margin-bottom:14px">
+        <label style="font-size:12px;font-weight:700;color:var(--text-dim);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Tên đăng nhập</label>
+        <input id="loginUser" type="text" placeholder="Nhập tên đăng nhập..."
+          style="width:100%;background:var(--dark3);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"
+          onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+      </div>
+      <div style="margin-bottom:6px">
+        <label style="font-size:12px;font-weight:700;color:var(--text-dim);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Mật khẩu</label>
+        <div style="position:relative">
+          <input id="loginPass" type="password" placeholder="Nhập mật khẩu..."
+            style="width:100%;background:var(--dark3);border:1.5px solid var(--border);border-radius:10px;padding:12px 48px 12px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s"
+            onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"
+            onkeydown="if(event.key==='Enter')doLogin()">
+          <button onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--gray-light);cursor:pointer;font-size:16px" id="passVisBtn">👁️</button>
+        </div>
+      </div>
+      <div id="loginError" style="display:none;background:rgba(227,28,35,0.1);border:1px solid rgba(227,28,35,0.3);border-radius:8px;padding:10px 14px;font-size:13px;color:#ff6b6b;margin-top:12px">
+        ❌ Tên đăng nhập hoặc mật khẩu không đúng!
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeLoginModal()">Hủy</button>
+      <button class="btn-confirm" onclick="doLogin()" style="min-width:120px">🔐 Đăng nhập</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>🛒 Giỏ hàng của bạn</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Giỏ hàng trống<br><small>Hãy chọn sim bạn yêu thích</small></div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total">Tổng cộng: <strong id="cartTotal">0 đ</strong></div>
+    <button class="btn-checkout" onclick="checkout()">Đặt hàng ngay →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// =========================================
+// DATA
+// =========================================
+const NETS = ['Viettel','Vinaphone','Mobifone','Vietnamobile'];
+const CATS = ['VIP','Tam Hoa','Tứ Quý','Ngũ Quý','Lục Quý','Lộc Phát','Thần Tài','Số lặp','Sảnh tiến','Năm sinh','Đặc biệt'];
+const NET_SHORT = { Viettel:'VTT', Vinaphone:'VNA', Mobifone:'MBF', Vietnamobile:'VNM' };
+const NET_CLASS = { Viettel:'net-viettel', Vinaphone:'net-vinaphone', Mobifone:'net-mobifone', Vietnamobile:'net-vietnamobile' };
+const BADGES = ['hot','vip','new','sale',null,null,null];
+
+let simDB = [];
+let filtered = [];
+let sortOrder = 'none';
+let curPage = 1;
+const PER_PAGE = 24;
+let filterNetVal = 'all';
+let filterCatVal = '';
+let filterPriceMin = 0, filterPriceMax = 999999999;
+let searchTerm = '';
+let cart = [];
+
+// Generate starter sims
+function genPhone(net) {
+  const prefixes = {
+    Viettel:['086','096','097','098','032','033','034','035','036','037','038','039'],
+    Vinaphone:['088','091','094','083','084','085'],
+    Mobifone:['089','090','093','070','079','077','076','078'],
+    Vietnamobile:['052','058','056']
+  };
+  const p = prefixes[net];
+  const pre = p[Math.floor(Math.random()*p.length)];
+  const suf = String(Math.floor(Math.random()*10000000)).padStart(7,'0');
+  return pre + suf;
+}
+
+function formatPhone(p) {
+  return p.slice(0,4)+'.'+p.slice(4,7)+'.'+p.slice(7);
+}
+
+function randomPrice() {
+  const tiers = [500000,800000,1000000,1500000,2000000,3000000,5000000,8000000,10000000,20000000,50000000];
+  return tiers[Math.floor(Math.random()*tiers.length)];
+}
+
+function formatPrice(n) {
+  if(n>=1000000) return (n/1000000).toFixed(n%1000000===0?0:1)+' triệu';
+  if(n>=1000) return (n/1000).toFixed(0)+'K';
+  return n+'đ';
+}
+
+function seedDB() {
+  for(let i=0;i<200;i++){
+    const net = NETS[Math.floor(Math.random()*NETS.length)];
+    const phone = genPhone(net);
+    const cat = CATS[Math.floor(Math.random()*CATS.length)];
+    const price = randomPrice();
+    const badge = BADGES[Math.floor(Math.random()*BADGES.length)];
+    simDB.push({ id:i+1, phone, net, cat, price, badge, goi: Math.random()>0.5?'Trả trước':'Trả sau' });
+  }
+}
+
+// =========================================
+// RENDER
+// =========================================
+function applyFilters() {
+  filtered = simDB.filter(s => {
+    if(filterNetVal!=='all' && s.net!==filterNetVal) return false;
+    if(filterCatVal && s.cat!==filterCatVal) return false;
+    if(s.price < filterPriceMin || s.price > filterPriceMax) return false;
+    if(searchTerm) {
+      const pat = searchTerm.replace(/\*/g,'.*').replace(/\?/g,'.');
+      if(!new RegExp(pat).test(s.phone)) return false;
+    }
+    return true;
+  });
+  if(sortOrder==='asc') filtered.sort((a,b)=>a.price-b.price);
+  else if(sortOrder==='desc') filtered.sort((a,b)=>b.price-a.price);
+  curPage = 1;
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('simGrid');
+  document.getElementById('foundCount').textContent = filtered.length.toLocaleString('vi');
+  const start = (curPage-1)*PER_PAGE;
+  const page = filtered.slice(start, start+PER_PAGE);
+
+  if(!page.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-dim)">
+      <div style="font-size:48px;margin-bottom:12px">🔍</div>
+      <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:6px">Không tìm thấy sim phù hợp</div>
+      <div style="font-size:13px">Hãy thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</div>
+    </div>`;
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = page.map(s => {
+    const badgeHtml = s.badge ? `<span class="sim-badge badge-${s.badge}">${s.badge==='vip'?'VIP':s.badge==='hot'?'HOT':s.badge==='new'?'NEW':'SALE'}</span>` : '';
+    const pOld = s.badge==='sale' ? `<span class="sim-price-old">${formatPrice(Math.floor(s.price*1.3))}</span>` : '';
+    const digits = s.phone.replace(/\D/g,'');
+    const highlight = digits.slice(-4);
+    const display = formatPhone(s.phone);
+    const hiDisplay = display.replace(new RegExp(highlight+'$'),'<span class="highlight">'+highlight+'</span>');
+    return `
+    <div class="sim-card" onclick="addCart(${s.id})">
+      ${badgeHtml}
+      <div class="sim-net">
+        <div class="net-logo ${NET_CLASS[s.net]}">${NET_SHORT[s.net]}</div>
+        <span class="net-name">${s.net}</span>
+      </div>
+      <div class="sim-number">${hiDisplay}</div>
+      <div class="sim-tags">
+        <span class="sim-tag">${s.cat}</span>
+        <span class="sim-tag">${s.goi}</span>
+      </div>
+      <div class="sim-footer">
+        <div class="sim-price">${pOld}${formatPrice(s.price)}</div>
+        <button class="btn-buy">Mua ngay</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const total = Math.ceil(filtered.length/PER_PAGE);
+  if(total<=1){ document.getElementById('pagination').innerHTML=''; return; }
+  let html = '';
+  if(curPage>1) html += `<button class="pg-btn" onclick="goPage(${curPage-1})">‹</button>`;
+  for(let i=Math.max(1,curPage-2);i<=Math.min(total,curPage+2);i++){
+    html += `<button class="pg-btn ${i===curPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  if(curPage<total) html += `<button class="pg-btn" onclick="goPage(${curPage+1})">›</button>`;
+  document.getElementById('pagination').innerHTML = html;
+}
+
+function goPage(n){ curPage=n; renderGrid(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+// =========================================
+// FILTERS
+// =========================================
+function filterNet(btn, val){
+  filterNetVal = val;
+  btn.closest('.filter-btns').querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function filterCat(e, val){
+  e.preventDefault(); filterCatVal = val; applyFilters();
+}
+function filterPrice(btn, min, max){
+  filterPriceMin=min; filterPriceMax=max;
+  btn.closest('.filter-btns').querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function sortSims(btn, order){
+  sortOrder = order;
+  btn.closest('.sort-wrap').querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function setSearch(v){ document.getElementById('searchInput').value=v; doSearch(); }
+function doSearch(){ searchTerm=document.getElementById('searchInput').value.trim(); applyFilters(); }
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('searchInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
+});
+
+// =========================================
+// CART
+// =========================================
+function addCart(id){
+  const s = simDB.find(x=>x.id===id);
+  if(!s) return;
+  if(cart.find(x=>x.id===id)){ showToast('⚠️ Sim <strong>'+formatPhone(s.phone)+'</strong> đã có trong giỏ!'); return; }
+  cart.push(s);
+  updateCart();
+  showToast('✅ Đã thêm <strong>'+formatPhone(s.phone)+'</strong> vào giỏ hàng');
+}
+function removeCart(id){ cart=cart.filter(x=>x.id!==id); updateCart(); }
+function updateCart(){
+  document.getElementById('cartCount').textContent = cart.length;
+  const wrap = document.getElementById('cartItems');
+  if(!cart.length){ wrap.innerHTML='<div class="cart-empty">Giỏ hàng trống<br><small>Hãy chọn sim bạn yêu thích</small></div>'; }
+  else { wrap.innerHTML = cart.map(s=>`
+    <div class="cart-item">
+      <div>
+        <div class="cart-num">${formatPhone(s.phone)}</div>
+        <div style="font-size:11px;color:var(--text-dim)">${s.net} · ${s.cat}</div>
+        <div class="cart-price">${formatPrice(s.price)}</div>
+      </div>
+      <button class="cart-remove" onclick="removeCart(${s.id})">✕</button>
+    </div>`).join(''); }
+  const total = cart.reduce((a,b)=>a+b.price,0);
+  document.getElementById('cartTotal').textContent = total.toLocaleString('vi')+'đ';
+}
+function toggleCart(){ document.getElementById('cartDrawer').classList.toggle('open'); }
+function checkout(){ if(!cart.length){showToast('⚠️ Giỏ hàng trống!');return;} showToast('📞 Vui lòng gọi <strong>0916 737 888</strong> để đặt hàng!'); }
+
+// =========================================
+// UPLOAD
+// =========================================
+let pendingFile = null;
+
+function openUploadModal(){ document.getElementById('uploadModal').classList.add('open'); }
+function closeUploadModal(){
+  document.getElementById('uploadModal').classList.remove('open');
+  resetUpload();
+}
+
+function resetUpload(){
+  pendingFile=null;
+  document.getElementById('fileListWrap').innerHTML='';
+  document.getElementById('uploadProgress').style.display='none';
+  document.getElementById('progressBar').style.width='0';
+  document.getElementById('btnConfirmUpload').disabled=true;
+  document.getElementById('fileInput').value='';
+}
+
+function handleFileSelect(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingFile = file;
+  const ext = file.name.split('.').pop().toLowerCase();
+  const icons = {xlsx:'📊',xls:'📊',csv:'📄',txt:'📝'};
+  const icon = icons[ext]||'📄';
+  const kb = (file.size/1024).toFixed(1);
+  document.getElementById('fileListWrap').innerHTML = `
+    <div class="file-list-item">
+      <div class="file-icon">${icon}</div>
+      <div class="file-info">
+        <div class="file-name">${file.name}</div>
+        <div class="file-size">${kb} KB · ${ext.toUpperCase()}</div>
+      </div>
+      <button class="file-remove" onclick="resetUpload()">✕</button>
+    </div>`;
+  document.getElementById('btnConfirmUpload').disabled = false;
+}
+
+// Drag & drop
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', ()=> dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e=>{
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if(f){ pendingFile=f; const fi = document.getElementById('fileInput'); const dt=new DataTransfer(); dt.items.add(f); fi.files=dt.files; handleFileSelect(fi); }
+});
+
+function confirmUpload(){
+  if(!pendingFile){ showToast('⚠️ Vui lòng chọn file trước!'); return; }
+  const prog = document.getElementById('uploadProgress');
+  const bar = document.getElementById('progressBar');
+  const txt = document.getElementById('progressText');
+  prog.style.display='block';
+  document.getElementById('btnConfirmUpload').disabled=true;
+
+  // Parse file
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    const text = e.target.result;
+    parseAndImport(text, pendingFile.name);
+  };
+  reader.readAsText(pendingFile, 'utf-8');
+
+  // Animate progress
+  let p=0;
+  const iv = setInterval(()=>{
+    p = Math.min(p+(Math.random()*15+5), 90);
+    bar.style.width = p+'%';
+    txt.textContent = `Đang xử lý... ${Math.floor(p)}%`;
+  }, 150);
+
+  setTimeout(()=>{
+    clearInterval(iv);
+    bar.style.width='100%';
+    txt.textContent='Hoàn tất!';
+    setTimeout(()=>{
+      closeUploadModal();
+      applyFilters();
+      document.getElementById('totalCount').textContent = simDB.length.toLocaleString('vi');
+    }, 600);
+  }, 2000);
+}
+
+function parseAndImport(text, fname){
+  const ext = fname.split('.').pop().toLowerCase();
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  let imported=0, skipped=0;
+  // Skip header
+  const start = lines[0].toLowerCase().includes('điện thoại')||lines[0].toLowerCase().includes('phone')||lines[0].toLowerCase().includes('số sim') ? 1 : 0;
+  lines.slice(start).forEach(line=>{
+    const cols = line.split(/[,;\t]+/).map(c=>c.trim().replace(/"/g,''));
+    if(cols.length<2) { skipped++; return; }
+    let phone = cols[0].replace(/\D/g,'');
+    if(phone.length<9||phone.length>11) { skipped++; return; }
+    if(phone.length===9) phone='0'+phone;
+    const net = cols[1]||'Viettel';
+    const price = parseInt((cols[2]||'500000').replace(/\D/g,''))||500000;
+    const cat = cols[3]||CATS[Math.floor(Math.random()*CATS.length)];
+    const goi = cols[4]||'Trả trước';
+    if(simDB.find(s=>s.phone===phone)) { skipped++; return; }
+    simDB.push({ id: Date.now()+imported, phone, net, cat, price, badge:null, goi });
+    imported++;
+  });
+  showToast(`✅ Đã nhập <strong>${imported}</strong> sim mới${skipped?` · Bỏ qua ${skipped} dòng lỗi`:''}`);
+}
+
+// =========================================
+// TOAST
+// =========================================
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.innerHTML=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// =========================================
+// ADMIN AUTH
+// =========================================
+// Tài khoản admin (có thể thêm nhiều tài khoản)
+const ADMIN_ACCOUNTS = [
+  { user: 'admin', pass: 'simDep@2025' },
+  { user: 'manager', pass: 'manager@123' }
+];
+
+let isAdmin = false;
+
+function openLoginModal(){
+  document.getElementById('loginModal').classList.add('open');
+  document.getElementById('loginError').style.display='none';
+  setTimeout(()=>document.getElementById('loginUser').focus(), 200);
+}
+function closeLoginModal(){
+  document.getElementById('loginModal').classList.remove('open');
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginError').style.display='none';
+}
+function togglePassVis(){
+  const inp = document.getElementById('loginPass');
+  const btn = document.getElementById('passVisBtn');
+  if(inp.type==='password'){ inp.type='text'; btn.textContent='🙈'; }
+  else { inp.type='password'; btn.textContent='👁️'; }
+}
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const match = ADMIN_ACCOUNTS.find(a=>a.user===u && a.pass===p);
+  if(match){
+    isAdmin = true;
+    closeLoginModal();
+    updateAdminUI();
+    showToast('✅ Đăng nhập thành công! Xin chào <strong>'+u+'</strong>');
+  } else {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+    // Shake effect
+    const modal = document.querySelector('#loginModal .modal');
+    modal.style.animation='none'; modal.offsetHeight;
+    modal.style.animation='shake 0.4s ease';
+  }
+}
+function doLogout(){
+  isAdmin = false;
+  updateAdminUI();
+  showToast('👋 Đã đăng xuất khỏi tài khoản Admin');
+}
+function updateAdminUI(){
+  document.getElementById('topbarLoginBtn').style.display   = isAdmin ? 'none'         : 'inline';
+  document.getElementById('topbarAdminInfo').style.display  = isAdmin ? 'inline-flex'  : 'none';
+  document.getElementById('uploadBar').style.display        = isAdmin ? 'flex'          : 'none';
+  document.getElementById('loginCta').style.display         = isAdmin ? 'none'          : 'flex';
+}
+
+
+seedDB();
+applyFilters();
+updateAdminUI();
+</script>
+</body>
+</html>
