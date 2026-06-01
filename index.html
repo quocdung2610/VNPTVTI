@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sim Số Đẹp - Tìm Sim Phong Thủy</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #e53935; --red2: #c62828; --gold: #f9a825; --gold2: #f57f17;
+  --dark: #1a1a2e; --dark2: #16213e; --text: #222; --muted: #666;
+  --border: #e0e0e0; --bg: #f5f5f5; --white: #fff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+.topbar { background: var(--dark); color: #ccc; font-size: 12px; padding: 6px 0; }
+.topbar .inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; display: flex; justify-content: space-between; align-items: center; }
+.topbar a { color: #ccc; text-decoration: none; margin-left: 16px; }
+.topbar a:hover { color: var(--gold); }
+
+.header { background: var(--red); padding: 10px 0; }
+.header .inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo span { color: var(--gold); }
+.search-bar { flex: 1; max-width: 500px; display: flex; }
+.search-bar input { flex: 1; padding: 10px 14px; border: none; border-radius: 6px 0 0 6px; font-family: inherit; font-size: 14px; outline: none; }
+.search-bar button { background: var(--gold); color: var(--dark); padding: 10px 18px; border: none; border-radius: 0 6px 6px 0; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.btn-login { background: transparent; border: 1.5px solid #fff; color: #fff; padding: 7px 16px; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.cart-btn { position: relative; color: #fff; font-size: 22px; cursor: pointer; text-decoration: none; }
+.cart-badge { position: absolute; top: -6px; right: -8px; background: var(--gold); color: var(--dark); border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+.nav { background: var(--dark2); }
+.nav .inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; display: flex; }
+.nav a { color: #ddd; text-decoration: none; padding: 11px 18px; font-size: 13px; font-weight: 500; display: block; transition: all 0.2s; cursor: pointer; }
+.nav a:hover, .nav a.active { color: var(--gold); background: rgba(255,255,255,0.05); }
+
+.suggestions { background: #fff3e0; border-bottom: 1px solid #ffe0b2; padding: 8px 0; }
+.suggestions .inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.suggestions span { font-size: 12px; color: var(--muted); }
+.sug-tag { background: #fff; border: 1px solid #ffcc80; color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 500; }
+.sug-tag:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+/* PAGE SECTIONS */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+.main { max-width: 1200px; margin: 16px auto; padding: 0 16px; display: flex; gap: 16px; }
+.sidebar { width: 220px; flex-shrink: 0; }
+.filter-box { background: #fff; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden; }
+.filter-title { background: var(--red); color: #fff; padding: 10px 14px; font-weight: 700; font-size: 13px; }
+.filter-section { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; }
+.filter-section:last-child { border-bottom: none; }
+.filter-section h4 { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+.filter-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ftag { padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); font-size: 11px; cursor: pointer; color: var(--text); background: #fafafa; }
+.ftag:hover, .ftag.active { background: var(--red); color: #fff; border-color: var(--red); }
+.ftag.gold { border-color: var(--gold); color: #b35900; }
+.ftag.gold:hover, .ftag.gold.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.cat-list { list-style: none; }
+.cat-list li a { display: block; padding: 5px 0; font-size: 12px; color: var(--text); text-decoration: none; border-bottom: 1px dashed #f0f0f0; }
+.cat-list li a:hover { color: var(--red); padding-left: 4px; }
+
+.content { flex: 1; min-width: 0; }
+.content-header { background: #fff; border-radius: 8px; border: 1px solid var(--border); padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.result-count { font-size: 13px; color: var(--muted); }
+.result-count strong { color: var(--red); font-size: 15px; }
+.sort-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; outline: none; cursor: pointer; }
+
+.sim-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.sim-table thead tr { background: var(--dark2); color: #fff; }
+.sim-table th { padding: 10px 12px; font-size: 12px; font-weight: 600; text-align: left; }
+.sim-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f5f5f5; }
+.sim-table tr:hover td { background: #fff8e1; }
+.sim-table tr:last-child td { border-bottom: none; }
+.sim-number { font-weight: 700; font-size: 15px; color: var(--dark); letter-spacing: 0.5px; }
+.nhamang { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+.viettel { background: #e8f5e9; color: #2e7d32; }
+.vinaphone { background: #e3f2fd; color: #1565c0; }
+.mobifone { background: #fce4ec; color: #c62828; }
+.price { color: var(--red); font-weight: 700; font-size: 14px; }
+.price-old { color: var(--muted); font-size: 11px; text-decoration: line-through; }
+.cat-badge { display: inline-block; background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; }
+.btn-buy { background: var(--red); color: #fff; border: none; padding: 6px 14px; border-radius: 5px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-buy:hover { background: var(--red2); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; flex-wrap: wrap; }
+.page-btn { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-family: inherit; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.page-btn:hover { border-color: var(--red); color: var(--red); }
+.page-btn.active { background: var(--red); color: #fff; border-color: var(--red); font-weight: 700; }
+
+/* =================== PHONG THUY MODULE =================== */
+.pt-page { max-width: 1200px; margin: 16px auto; padding: 0 16px; }
+
+.pt-hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 12px; padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; text-align: center; }
+.pt-hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(249,168,37,0.15) 0%, transparent 70%); border-radius: 50%; }
+.pt-hero h1 { color: #fff; font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.pt-hero h1 span { color: var(--gold); }
+.pt-hero p { color: #aaa; font-size: 14px; }
+
+.pt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+.pt-input-card { background: #fff; border-radius: 10px; border: 1px solid var(--border); padding: 20px; }
+.pt-input-card h3 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.pt-input-card h3 .icon { width: 28px; height: 28px; background: var(--red); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+.form-row { margin-bottom: 12px; }
+.form-row label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; }
+.form-row input, .form-row select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 13px; outline: none; transition: border 0.2s; }
+.form-row input:focus, .form-row select:focus { border-color: var(--red); }
+
+.menh-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 4px; }
+.menh-btn { padding: 8px 4px; border-radius: 6px; border: 1.5px solid var(--border); text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.2s; }
+.menh-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.menh-btn.selected { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+.menh-kim { border-color: #b0bec5; color: #455a64; }
+.menh-kim.selected { background: #b0bec5; color: #fff; }
+.menh-moc { border-color: #66bb6a; color: #2e7d32; }
+.menh-moc.selected { background: #66bb6a; color: #fff; }
+.menh-thuy { border-color: #42a5f5; color: #1565c0; }
+.menh-thuy.selected { background: #42a5f5; color: #fff; }
+.menh-hoa { border-color: #ef5350; color: #c62828; }
+.menh-hoa.selected { background: #ef5350; color: #fff; }
+.menh-tho { border-color: #ffa726; color: #e65100; }
+.menh-tho.selected { background: #ffa726; color: #fff; }
+
+.btn-generate { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--red), var(--red2)); color: #fff; border: none; border-radius: 8px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(229,57,53,0.4); }
+.btn-generate.loading { opacity: 0.7; pointer-events: none; }
+
+/* KẾT QUẢ PHONG THỦY */
+.pt-result { background: #fff; border-radius: 10px; border: 1px solid var(--border); padding: 20px; }
+.pt-result h3 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+.sim-pt-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.sim-pt-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--red); border-radius: 10px 0 0 10px; }
+.sim-pt-card:hover { border-color: var(--red); box-shadow: 0 4px 16px rgba(229,57,53,0.15); transform: translateY(-2px); }
+.sim-pt-card.vip::before { background: var(--gold); }
+.sim-pt-card.vip { border-color: #ffe082; background: #fffde7; }
+
+.sim-pt-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.sim-pt-number { font-size: 20px; font-weight: 800; color: var(--dark); letter-spacing: 1px; }
+.sim-pt-number .lucky { color: var(--red); }
+.sim-pt-price-wrap { text-align: right; }
+.sim-pt-price { color: var(--red); font-weight: 800; font-size: 16px; }
+.sim-pt-price-old { font-size: 11px; color: var(--muted); text-decoration: line-through; }
+
+.sim-pt-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.pt-tag { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.pt-tag-red { background: #ffebee; color: var(--red); }
+.pt-tag-gold { background: #fff8e1; color: #f57f17; }
+.pt-tag-green { background: #e8f5e9; color: #2e7d32; }
+.pt-tag-blue { background: #e3f2fd; color: #1565c0; }
+
+.sim-pt-score { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.score-label { font-size: 12px; color: var(--muted); }
+.score-bar { flex: 1; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+.score-fill { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--gold), var(--red)); transition: width 0.8s ease; }
+.score-num { font-size: 12px; font-weight: 700; color: var(--red); min-width: 30px; }
+
+.sim-pt-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; border-top: 1px solid #f0f0f0; padding-top: 8px; }
+
+.sim-pt-actions { display: flex; gap: 8px; }
+.btn-pt-buy { flex: 1; padding: 8px; background: var(--red); color: #fff; border: none; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.btn-pt-buy:hover { background: var(--red2); }
+.btn-pt-save { padding: 8px 14px; border: 1.5px solid var(--border); background: #fff; border-radius: 6px; font-family: inherit; font-size: 12px; cursor: pointer; }
+.btn-pt-save:hover { border-color: var(--gold); color: var(--gold2); }
+
+.star-rating { color: var(--gold); font-size: 13px; }
+
+/* LOADING ANIMATION */
+.pt-loading { text-align: center; padding: 40px; display: none; }
+.pt-loading .spinner { width: 48px; height: 48px; border: 4px solid #f0f0f0; border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pt-loading p { color: var(--muted); font-size: 13px; }
+
+.pt-empty { text-align: center; padding: 40px; color: var(--muted); }
+.pt-empty .emoji { font-size: 40px; display: block; margin-bottom: 10px; }
+
+/* PHONG THUY INFO CARDS */
+.pt-info-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+.pt-menh-card { border-radius: 10px; padding: 14px; text-align: center; border: 1px solid var(--border); }
+.pt-menh-card .em { font-size: 24px; display: block; margin-bottom: 6px; }
+.pt-menh-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.pt-menh-card p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.card-kim { background: linear-gradient(135deg, #eceff1, #fff); border-color: #b0bec5; }
+.card-moc { background: linear-gradient(135deg, #e8f5e9, #fff); border-color: #a5d6a7; }
+.card-thuy { background: linear-gradient(135deg, #e3f2fd, #fff); border-color: #90caf9; }
+.card-hoa { background: linear-gradient(135deg, #ffebee, #fff); border-color: #ef9a9a; }
+.card-tho { background: linear-gradient(135deg, #fff8e1, #fff); border-color: #ffe082; }
+
+/* COUNTER ANIMATION */
+@keyframes countUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+.sim-pt-card { animation: countUp 0.4s ease both; }
+
+.footer { background: var(--dark); color: #aaa; margin-top: 32px; padding: 28px 0 16px; }
+.footer .inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin-bottom: 24px; }
+.footer h4 { color: var(--gold); font-size: 13px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 6px; }
+.footer ul li a { color: #aaa; text-decoration: none; font-size: 12px; }
+.footer ul li a:hover { color: var(--gold); }
+.footer-bottom { border-top: 1px solid #333; padding-top: 14px; text-align: center; font-size: 12px; color: #666; }
+
+@media (max-width: 768px) {
+  .main { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .header .inner { flex-wrap: wrap; }
+  .search-bar { order: 3; max-width: 100%; width: 100%; }
+  .nav .inner { overflow-x: auto; }
+  .nav a { padding: 10px 12px; white-space: nowrap; }
+  .pt-grid { grid-template-columns: 1fr; }
+  .pt-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .menh-grid { grid-template-columns: repeat(5, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <span>☎ Hotline: <strong style="color:#f9a825">0912.345.678</strong> — Hỗ trợ 24/7</span>
+    <div><a href="#">Cộng tác viên</a><a href="#">Tải ứng dụng</a><a href="#">Trợ giúp</a></div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="inner">
+    <a class="logo" href="#">&#128247; Sim<span>ĐẸP</span>.vn</a>
+    <div class="search-bar">
+      <input type="text" placeholder="Tìm số sim đẹp, VD: 0912*88, *999*..." id="searchInput">
+      <button onclick="filterSims()">🔍 Tìm Sim</button>
+    </div>
+    <div class="header-right">
+      <button class="btn-login">Đăng nhập</button>
+      <a class="cart-btn" href="#">🛒<span class="cart-badge" id="cartCount">0</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="inner">
+    <a onclick="showPage('sim')" class="active" id="nav-sim">Tìm Sim</a>
+    <a href="#">Giới thiệu</a>
+    <a href="#">Hướng dẫn mua sim</a>
+    <a onclick="showPage('phongthuy')" id="nav-pt">🧿 Tra cứu Phong Thủy</a>
+    <a href="#">Liên hệ</a>
+  </div>
+</div>
+
+<div class="suggestions">
+  <div class="inner">
+    <span>Tìm nhanh:</span>
+    <span class="sug-tag" onclick="quickSearch('9999')">9999</span>
+    <span class="sug-tag" onclick="quickSearch('0912')">0912*88</span>
+    <span class="sug-tag" onclick="quickSearch('88')">*88</span>
+    <span class="sug-tag" onclick="quickSearch('1991')">*1991</span>
+    <span class="sug-tag" onclick="quickSearch('8686')">8686</span>
+    <span class="sug-tag" onclick="quickSearch('6868')">6868</span>
+  </div>
+</div>
+
+<!-- ===== TRANG TÌM SIM ===== -->
+<div id="page-sim" class="page-section active">
+<div class="main">
+  <div class="sidebar">
+    <div class="filter-box">
+      <div class="filter-title">🔧 Bộ lọc tìm kiếm</div>
+      <div class="filter-section">
+        <h4>Nhà mạng</h4>
+        <div class="filter-tags">
+          <span class="ftag active" onclick="setMangFilter('tat-ca',this)">Tất cả</span>
+          <span class="ftag" onclick="setMangFilter('viettel',this)">Viettel</span>
+          <span class="ftag" onclick="setMangFilter('vinaphone',this)">Vinaphone</span>
+          <span class="ftag" onclick="setMangFilter('mobifone',this)">Mobifone</span>
+        </div>
+      </div>
+      <div class="filter-section">
+        <h4>Danh mục</h4>
+        <ul class="cat-list">
+          <li><a href="#" onclick="return false;">Sim V.I.P</a></li>
+          <li><a href="#" onclick="return false;">Tam Hoa</a></li>
+          <li><a href="#" onclick="return false;">Tứ Quý</a></li>
+          <li><a href="#" onclick="return false;">Sim Phong Thủy</a></li>
+          <li><a href="#" onclick="return false;">Ngũ Quý</a></li>
+          <li><a href="#" onclick="return false;">Lộc Phát</a></li>
+          <li><a href="#" onclick="return false;">Thần Tài</a></li>
+          <li><a href="#" onclick="return false;">Số lặp</a></li>
+          <li><a href="#" onclick="return false;">Năm sinh</a></li>
+        </ul>
+      </div>
+      <div class="filter-section">
+        <h4>Khoảng giá</h4>
+        <div class="filter-tags">
+          <span class="ftag gold active" onclick="setPriceFilter(0,99999999,this)">Tất cả</span>
+          <span class="ftag gold" onclick="setPriceFilter(0,500000,this)">≤ 500K</span>
+          <span class="ftag gold" onclick="setPriceFilter(0,1000000,this)">1 triệu</span>
+          <span class="ftag gold" onclick="setPriceFilter(0,3000000,this)">3 triệu</span>
+          <span class="ftag gold" onclick="setPriceFilter(0,5000000,this)">5 triệu</span>
+          <span class="ftag gold" onclick="setPriceFilter(0,10000000,this)">10 triệu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="content-header">
+      <div class="result-count">Tìm thấy <strong id="simCount">0</strong> sim</div>
+      <select class="sort-select" onchange="sortSims(this.value)">
+        <option value="default">Sắp xếp mặc định</option>
+        <option value="asc">Giá thấp đến cao</option>
+        <option value="desc">Giá cao đến thấp</option>
+      </select>
+    </div>
+    <table class="sim-table" id="simTable">
+      <thead><tr>
+        <th>Số sim</th><th>Nhà mạng</th><th>Danh mục</th><th>Giá bán</th><th>Gói cước</th><th>Mua</th>
+      </tr></thead>
+      <tbody id="simBody"></tbody>
+    </table>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TRANG PHONG THỦY ===== -->
+<div id="page-phongthuy" class="page-section">
+<div class="pt-page">
+  <div class="pt-hero">
+    <h1>🧿 Sim Số <span>Phong Thủy</span></h1>
+    <p>Nhập thông tin của bạn — hệ thống tự động tìm sim hợp mệnh, mang lại tài lộc & may mắn</p>
+  </div>
+
+  <div class="pt-info-grid">
+    <div class="pt-menh-card card-kim"><span class="em">🥇</span><h4 style="color:#455a64">Mệnh Kim</h4><p>Số đẹp: 6, 7<br>Hạp: Thủy, Thổ<br>Kỵ: Hỏa</p></div>
+    <div class="pt-menh-card card-moc"><span class="em">🌿</span><h4 style="color:#2e7d32">Mệnh Mộc</h4><p>Số đẹp: 3, 4<br>Hạp: Hỏa, Thủy<br>Kỵ: Kim</p></div>
+    <div class="pt-menh-card card-thuy"><span class="em">💧</span><h4 style="color:#1565c0">Mệnh Thủy</h4><p>Số đẹp: 1, 6<br>Hạp: Kim, Mộc<br>Kỵ: Thổ</p></div>
+    <div class="pt-menh-card card-hoa"><span class="em">🔥</span><h4 style="color:#c62828">Mệnh Hỏa</h4><p>Số đẹp: 2, 7<br>Hạp: Mộc, Thổ<br>Kỵ: Thủy</p></div>
+    <div class="pt-menh-card card-tho"><span class="em">🌍</span><h4 style="color:#e65100">Mệnh Thổ</h4><p>Số đẹp: 5, 0<br>Hạp: Hỏa, Kim<br>Kỵ: Mộc</p></div>
+  </div>
+
+  <div class="pt-grid">
+    <div class="pt-input-card">
+      <h3><span class="icon">✨</span> Thông tin tra cứu</h3>
+
+      <div class="form-row">
+        <label>Họ và tên</label>
+        <input type="text" id="ptName" placeholder="Nhập họ tên của bạn...">
+      </div>
+      <div class="form-row">
+        <label>Năm sinh</label>
+        <select id="ptNamSinh">
+          <option value="">-- Chọn năm sinh --</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Giới tính</label>
+        <select id="ptGioiTinh">
+          <option value="nam">Nam</option>
+          <option value="nu">Nữ</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Nhà mạng muốn dùng</label>
+        <select id="ptMang">
+          <option value="tat-ca">Tất cả</option>
+          <option value="viettel">Viettel</option>
+          <option value="vinaphone">Vinaphone</option>
+          <option value="mobifone">Mobifone</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Hoặc chọn mệnh trực tiếp</label>
+        <div class="menh-grid">
+          <div class="menh-btn menh-kim" onclick="selectMenh('kim',this)">🥇<br>Kim</div>
+          <div class="menh-btn menh-moc" onclick="selectMenh('moc',this)">🌿<br>Mộc</div>
+          <div class="menh-btn menh-thuy" onclick="selectMenh('thuy',this)">💧<br>Thủy</div>
+          <div class="menh-btn menh-hoa" onclick="selectMenh('hoa',this)">🔥<br>Hỏa</div>
+          <div class="menh-btn menh-tho" onclick="selectMenh('tho',this)">🌍<br>Thổ</div>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePhongThuy()" id="btnGenerate">
+        🔮 Tìm Sim Phong Thủy Hợp Mệnh
+      </button>
+      <div style="margin-top:10px; background:#fff3e0; border-radius:6px; padding:8px 12px; font-size:11px; color:#e65100; text-align:center;">
+        💰 Giá sim từ <strong>200.000đ – 500.000đ</strong> — Phù hợp mọi ngân sách
+      </div>
+    </div>
+
+    <div class="pt-result">
+      <h3>🎯 Kết quả sim hợp mệnh</h3>
+      <div class="pt-loading" id="ptLoading">
+        <div class="spinner"></div>
+        <p>Đang phân tích phong thủy và tìm sim phù hợp...</p>
+      </div>
+      <div id="ptEmpty" class="pt-empty">
+        <span class="emoji">🔮</span>
+        <p>Nhập thông tin bên trái và nhấn<br><strong>"Tìm Sim Phong Thủy"</strong> để xem kết quả</p>
+      </div>
+      <div id="ptResults"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div><h4>Sim Đẹp VN</h4><ul>
+        <li><a href="#">Giới thiệu</a></li><li><a href="#">Chính sách bán hàng</a></li>
+        <li><a href="#">Chính sách bảo mật</a></li>
+      </ul></div>
+      <div><h4>Danh mục sim</h4><ul>
+        <li><a href="#">Sim Tứ Quý</a></li><li><a href="#">Sim Phong Thủy</a></li>
+        <li><a href="#">Sim Năm Sinh</a></li>
+      </ul></div>
+      <div><h4>Hỗ trợ</h4><ul>
+        <li><a href="#">Hướng dẫn mua sim</a></li><li><a href="#">Tra cứu phong thủy</a></li>
+        <li><a href="#">Liên hệ</a></li>
+      </ul></div>
+      <div><h4>Liên hệ</h4><ul>
+        <li><a href="#">☎ 0912.345.678</a></li>
+        <li><a href="#">✉ info@simdep.vn</a></li>
+        <li><a href="#">📍 Hà Nội, Việt Nam</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 SimĐẹp.vn — Chuyên cung cấp sim số đẹp toàn quốc</div>
+  </div>
+</div>
+
+<script>
+// ===== DỮ LIỆU SIM =====
+const simData = [
+  { so: '0912.888.999', mang: 'viettel', cat: 'Lục Quý', gia: 45000000, goi: 'Trả trước', menh: 'kim' },
+  { so: '0988.666.888', mang: 'viettel', cat: 'Tam Hoa', gia: 8500000, goi: 'Trả trước', menh: 'moc' },
+  { so: '0914.789.789', mang: 'vinaphone', cat: 'Số tiến', gia: 3200000, goi: 'Trả sau', menh: 'thuy' },
+  { so: '0908.1991.99', mang: 'mobifone', cat: 'Năm sinh', gia: 1500000, goi: 'Trả trước', menh: 'hoa' },
+  { so: '0912.456.456', mang: 'viettel', cat: 'Số lặp', gia: 2800000, goi: 'Trả trước', menh: 'tho' },
+  { so: '0989.777.888', mang: 'vinaphone', cat: 'Thần Tài', gia: 15000000, goi: 'Trả sau', menh: 'kim' },
+  { so: '0366.8686.86', mang: 'viettel', cat: 'Lộc Phát', gia: 9900000, goi: 'Trả trước', menh: 'moc' },
+  { so: '0799.999.666', mang: 'mobifone', cat: 'Ngũ Quý', gia: 22000000, goi: 'Trả trước', menh: 'thuy' },
+  { so: '0918.1234.56', mang: 'vinaphone', cat: 'Sảnh tiến', gia: 4500000, goi: 'Trả sau', menh: 'hoa' },
+  { so: '0362.88.0000', mang: 'viettel', cat: 'Sim VIP', gia: 35000000, goi: 'Trả trước', menh: 'tho' },
+  { so: '0905.8888.66', mang: 'mobifone', cat: 'Tứ Quý', gia: 18000000, goi: 'Trả trước', menh: 'kim' },
+  { so: '0913.369.369', mang: 'vinaphone', cat: 'Số lặp', gia: 6800000, goi: 'Trả trước', menh: 'moc' },
+  { so: '0986.1988.88', mang: 'viettel', cat: 'Năm sinh', gia: 2200000, goi: 'Trả trước', menh: 'thuy' },
+  { so: '0939.68.6868', mang: 'mobifone', cat: 'Lộc Phát', gia: 12500000, goi: 'Trả sau', menh: 'hoa' },
+  { so: '0912.0000.99', mang: 'viettel', cat: 'Sim VIP', gia: 28000000, goi: 'Trả trước', menh: 'tho' },
+  { so: '0338.999.888', mang: 'viettel', cat: 'Tam Hoa', gia: 7600000, goi: 'Trả trước', menh: 'kim' },
+  { so: '0914.2000.00', mang: 'vinaphone', cat: 'Năm sinh', gia: 1800000, goi: 'Trả trước', menh: 'moc' },
+  { so: '0906.789.012', mang: 'mobifone', cat: 'Sảnh tiến', gia: 3900000, goi: 'Trả sau', menh: 'thuy' },
+  { so: '0977.77.8888', mang: 'viettel', cat: 'Thần Tài', gia: 19500000, goi: 'Trả trước', menh: 'hoa' },
+  { so: '0888.666.999', mang: 'vinaphone', cat: 'Ngũ Quý', gia: 16000000, goi: 'Trả trước', menh: 'tho' },
+];
+
+// ===== PHONG THỦY DATA =====
+const menhData = {
+  kim: { label:'Kim', emoji:'🥇', luckyNums:[6,7,1], color:'#455a64', hapMenh:['thuy','tho'], kyMenh:['hoa'], catNgu:'Kim', desc:'Mệnh Kim ưa số 6, 7. Sim chứa nhiều số 6, 7 rất hợp mệnh.' },
+  moc: { label:'Mộc', emoji:'🌿', luckyNums:[3,4,8], color:'#2e7d32', hapMenh:['hoa','thuy'], kyMenh:['kim'], catNgu:'Mộc', desc:'Mệnh Mộc ưa số 3, 4. Sim có nhiều số 3, 4 mang tài lộc.' },
+  thuy: { label:'Thủy', emoji:'💧', luckyNums:[1,6,0], color:'#1565c0', hapMenh:['kim','moc'], kyMenh:['tho'], catNgu:'Thủy', desc:'Mệnh Thủy ưa số 1, 6. Sim chứa 1, 6 mang sự thịnh vượng.' },
+  hoa: { label:'Hỏa', emoji:'🔥', luckyNums:[2,7,9], color:'#c62828', hapMenh:['moc','tho'], kyMenh:['thuy'], catNgu:'Hỏa', desc:'Mệnh Hỏa ưa số 2, 7, 9. Sim nhiều số này rất may mắn.' },
+  tho: { label:'Thổ', emoji:'🌍', luckyNums:[5,0,8], color:'#e65100', hapMenh:['hoa','kim'], kyMenh:['moc'], catNgu:'Thổ', desc:'Mệnh Thổ ưa số 5, 0. Sim chứa nhiều 5, 0 đem lại may mắn.' },
+};
+
+const namSinhMenh = {
+  1924:'tho',1925:'kim',1926:'hoa',1927:'hoa',1928:'moc',1929:'moc',
+  1930:'tho',1931:'tho',1932:'kim',1933:'kim',1934:'thuy',1935:'thuy',
+  1936:'hoa',1937:'hoa',1938:'moc',1939:'moc',1940:'tho',1941:'tho',
+  1942:'kim',1943:'kim',1944:'thuy',1945:'thuy',1946:'hoa',1947:'hoa',
+  1948:'moc',1949:'moc',1950:'tho',1951:'tho',1952:'kim',1953:'kim',
+  1954:'thuy',1955:'thuy',1956:'hoa',1957:'hoa',1958:'moc',1959:'moc',
+  1960:'tho',1961:'tho',1962:'kim',1963:'kim',1964:'thuy',1965:'thuy',
+  1966:'hoa',1967:'hoa',1968:'moc',1969:'moc',1970:'tho',1971:'tho',
+  1972:'kim',1973:'kim',1974:'thuy',1975:'thuy',1976:'hoa',1977:'hoa',
+  1978:'moc',1979:'moc',1980:'tho',1981:'tho',1982:'kim',1983:'kim',
+  1984:'thuy',1985:'thuy',1986:'hoa',1987:'hoa',1988:'moc',1989:'moc',
+  1990:'tho',1991:'tho',1992:'kim',1993:'kim',1994:'thuy',1995:'thuy',
+  1996:'hoa',1997:'hoa',1998:'moc',1999:'moc',2000:'tho',2001:'tho',
+  2002:'kim',2003:'kim',2004:'thuy',2005:'thuy',2006:'hoa',2007:'hoa',
+  2008:'moc',2009:'moc',2010:'tho',
+};
+
+// ===== SINH SIM PHONG THỦY GIÁ 200K-500K =====
+function generateSimPT(menh, mang) {
+  const m = menhData[menh];
+  const lucky = m.luckyNums;
+
+  // ===== LỌC TỪ KHO SIM THẬT (simData) =====
+  let pool = simData.filter(s => {
+    // Lọc nhà mạng
+    if (mang !== 'tat-ca' && s.mang !== mang) return false;
+    // Lấy chỉ các chữ số của số sim
+    const digits = s.so.replace(/\./g, '');
+    // Đếm số may mắn trong sim
+    const numLucky = digits.split('').filter(d => lucky.includes(parseInt(d))).length;
+    // Phải có ít nhất 2 số may mắn
+    return numLucky >= 2;
+  });
+
+  // Nếu không đủ sim trong kho → thông báo
+  if (pool.length === 0) return [];
+
+  // Tính điểm phong thủy cho từng sim trong kho
+  const scored = pool.map(s => {
+    const digits = s.so.replace(/\./g, '');
+    const numLucky = digits.split('').filter(d => lucky.includes(parseInt(d))).length;
+    // Điểm dựa trên: số lượng số may mắn + mệnh sim khớp mệnh người dùng
+    const menhBonus = s.menh === menh ? 20 : (menhData[menh].hapMenh.includes(s.menh) ? 10 : 0);
+    const score = Math.min(100, 40 + numLucky * 12 + menhBonus);
+    // Mô tả phong thủy
+    const tongSo = digits.split('').reduce((a,b) => a+parseInt(b), 0);
+    const descs = [
+      `Sim chứa ${numLucky} số may mắn (${lucky.join(', ')}) — rất hợp mệnh ${m.label}. Mang lại tài lộc và sự nghiệp thuận lợi.`,
+      `Tổng các chữ số = ${tongSo} — con số cát tường cho mệnh ${m.label}. Thích hợp kinh doanh, giao thương.`,
+      `Sim có ${numLucky} lần xuất hiện số may mắn ${lucky[0]},${lucky[1]} — biểu tượng sung túc, vượng phát cho mệnh ${m.label}.`,
+    ];
+    return {
+      display: s.so,
+      mang: s.mang,
+      cat: s.cat,
+      gia: s.gia,
+      goi: s.goi,
+      score,
+      numLucky,
+      desc: descs[numLucky % descs.length],
+      menh: s.menh,
+      luckyNums: lucky,
+    };
+  });
+
+  // Sắp xếp theo điểm cao nhất, lấy tối đa 8 sim
+  return scored.sort((a, b) => b.score - a.score).slice(0, 8);
+}
+
+function calcMenh(namSinh) {
+  return namSinhMenh[parseInt(namSinh)] || null;
+}
+
+// ===== PHONG THỦY UI =====
+let selectedMenh = null;
+
+function selectMenh(menh, el) {
+  selectedMenh = menh;
+  document.querySelectorAll('.menh-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('ptNamSinh').value = '';
+}
+
+function generatePhongThuy() {
+  let menh = selectedMenh;
+  const namSinh = document.getElementById('ptNamSinh').value;
+  const mang = document.getElementById('ptMang').value;
+  const name = document.getElementById('ptName').value.trim();
+
+  if (namSinh) {
+    const m = calcMenh(namSinh);
+    if (m) { menh = m; selectedMenh = m; }
+  }
+
+  if (!menh) {
+    alert('Vui lòng chọn năm sinh hoặc chọn mệnh để tra cứu!');
+    return;
+  }
+
+  const btn = document.getElementById('btnGenerate');
+  btn.classList.add('loading');
+  btn.textContent = '⏳ Đang phân tích...';
+  document.getElementById('ptLoading').style.display = 'block';
+  document.getElementById('ptEmpty').style.display = 'none';
+  document.getElementById('ptResults').innerHTML = '';
+
+  setTimeout(() => {
+    const sims = generateSimPT(menh, mang);
+    const m = menhData[menh];
+
+    document.getElementById('ptLoading').style.display = 'none';
+    btn.classList.remove('loading');
+    btn.textContent = '🔮 Tìm Sim Phong Thủy Hợp Mệnh';
+
+    if (sims.length === 0) {
+      document.getElementById('ptResults').innerHTML = `
+        <div style="text-align:center; padding:30px; color:var(--muted);">
+          <div style="font-size:36px; margin-bottom:10px;">😔</div>
+          <div style="font-size:14px; font-weight:700; margin-bottom:6px;">Không tìm thấy sim hợp mệnh trong kho</div>
+          <div style="font-size:12px;">Kho hiện chưa có sim mệnh <strong>${m.label}</strong>${mang!=='tat-ca'?' nhà mạng '+mang:''}.<br>Vui lòng thử nhà mạng khác hoặc liên hệ để được tư vấn.</div>
+        </div>`;
+      return;
+    }
+
+    let html = `
+      <div style="background: linear-gradient(135deg,${m.color}22,${m.color}11); border:1.5px solid ${m.color}44; border-radius:8px; padding:12px 14px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:700; color:${m.color}; margin-bottom:4px;">${m.emoji} Mệnh ${m.label} ${name ? '— ' + name : ''}</div>
+        <div style="font-size:12px; color:#555;">${m.desc}</div>
+        <div style="margin-top:6px; font-size:11px; color:#888;">Số may mắn: <strong style="color:${m.color}">${m.luckyNums.join(', ')}</strong> &nbsp;|&nbsp; Hạp với: <strong>${m.hapMenh.map(x=>menhData[x].label).join(', ')}</strong></div>
+        <div style="margin-top:4px; font-size:11px; color:#888;">Tìm thấy <strong style="color:${m.color}">${sims.length} sim</strong> hợp mệnh trong kho</div>
+      </div>
+    `;
+
+    sims.forEach((s, i) => {
+      const isVip = s.score >= 85;
+      const stars = '⭐'.repeat(Math.round(s.score/20));
+      const mangLabel = {viettel:'Viettel',vinaphone:'Vinaphone',mobifone:'Mobifone'};
+      const mangClass = s.mang;
+      html += `
+        <div class="sim-pt-card ${isVip?'vip':''}" style="animation-delay:${i*0.07}s">
+          <div class="sim-pt-top">
+            <div>
+              <div class="sim-pt-number">${s.display}</div>
+              <span class="nhamang ${mangClass}">${mangLabel[s.mang]}</span>
+            </div>
+            <div class="sim-pt-price-wrap">
+              <div class="sim-pt-price">${formatPrice(s.gia)}</div>
+              <div class="sim-pt-price-old">${formatPrice(Math.round(s.gia*1.3))}</div>
+              <div style="font-size:11px; color:#f57f17; font-weight:600;">${isVip?'⭐ Siêu hợp mệnh':stars}</div>
+            </div>
+          </div>
+          <div class="sim-pt-tags">
+            <span class="pt-tag pt-tag-red">Hợp mệnh ${m.label}</span>
+            <span class="pt-tag pt-tag-gold">${s.cat}</span>
+            <span class="pt-tag pt-tag-green">${s.numLucky} số may mắn</span>
+            ${isVip ? '<span class="pt-tag pt-tag-blue">VIP</span>' : ''}
+          </div>
+          <div class="sim-pt-score">
+            <span class="score-label">Độ hợp mệnh:</span>
+            <div class="score-bar"><div class="score-fill" style="width:${s.score}%"></div></div>
+            <span class="score-num">${s.score}%</span>
+          </div>
+          <div class="sim-pt-desc">${s.desc}</div>
+          <div class="sim-pt-actions">
+            <button class="btn-pt-buy" onclick="addCart('${s.display}')">🛒 Mua ngay — ${formatPrice(s.gia)}</button>
+            <button class="btn-pt-save">♡ Lưu</button>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById('ptResults').innerHTML = html;
+  }, 1200);
+}
+
+// ===== TRANG SIM THƯỜNG =====
+let filtered = [...simData], currentPage = 1, perPage = 10, cartCount = 0;
+let activeFilters = { mang: 'tat-ca', priceMax: 99999999 };
+
+function formatPrice(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(n%1000000===0?0:1) + ' triệu';
+  if (n >= 1000) return Math.round(n/1000) + 'K';
+  return n.toLocaleString('vi-VN') + 'đ';
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.replace(/\./g,'').replace(/\*/g,'');
+  filtered = simData.filter(s => {
+    const matchQ = !q || s.so.replace(/\./g,'').includes(q);
+    const matchMang = activeFilters.mang === 'tat-ca' || s.mang === activeFilters.mang;
+    const matchPrice = s.gia <= activeFilters.priceMax;
+    return matchQ && matchMang && matchPrice;
+  });
+  currentPage = 1;
+  renderTable();
+}
+
+function filterSims() { applyFilters(); }
+function quickSearch(q) { document.getElementById('searchInput').value = q; applyFilters(); }
+
+function setMangFilter(val, el) {
+  document.querySelectorAll('.filter-tags .ftag:not(.gold)').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeFilters.mang = val;
+  applyFilters();
+}
+
+function setPriceFilter(min, max, el) {
+  document.querySelectorAll('.filter-tags .ftag.gold').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeFilters.priceMax = max;
+  applyFilters();
+}
+
+function sortSims(val) {
+  if (val === 'asc') filtered.sort((a,b) => a.gia - b.gia);
+  else if (val === 'desc') filtered.sort((a,b) => b.gia - a.gia);
+  renderTable();
+}
+
+function getMangClass(mang) {
+  const label = { viettel:'Viettel', vinaphone:'Vinaphone', mobifone:'Mobifone' };
+  return `<span class="nhamang ${mang}">${label[mang]}</span>`;
+}
+
+function renderTable() {
+  const start = (currentPage-1)*perPage;
+  const page = filtered.slice(start, start+perPage);
+  document.getElementById('simBody').innerHTML = page.map(s => `
+    <tr>
+      <td><span class="sim-number">${s.so}</span></td>
+      <td>${getMangClass(s.mang)}</td>
+      <td><span class="cat-badge">${s.cat}</span></td>
+      <td><div class="price">${formatPrice(s.gia)}</div><div class="price-old">${formatPrice(Math.round(s.gia*1.15))}</div></td>
+      <td>${s.goi}</td>
+      <td><button class="btn-buy" onclick="addCart('${s.so}')">Mua ngay</button></td>
+    </tr>
+  `).join('');
+  document.getElementById('simCount').textContent = filtered.length;
+  renderPagination();
+}
+
+function renderPagination() {
+  const total = Math.ceil(filtered.length/perPage);
+  let html = '';
+  if (currentPage > 1) html += `<button class="page-btn" onclick="goPage(${currentPage-1})">&#8249;</button>`;
+  for (let i=1; i<=total; i++) {
+    if (i<=3 || i===total || Math.abs(i-currentPage)<=1)
+      html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if (i===4 && currentPage>5) html += `<span style="padding:0 4px;color:#999">...</span>`;
+  }
+  if (currentPage < total) html += `<button class="page-btn" onclick="goPage(${currentPage+1})">&#8250;</button>`;
+  document.getElementById('pagination').innerHTML = html;
+}
+
+function goPage(p) { currentPage=p; renderTable(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function addCart(so) {
+  cartCount++;
+  document.getElementById('cartCount').textContent = cartCount;
+  const btns = document.querySelectorAll('.btn-buy, .btn-pt-buy');
+  btns.forEach(b => { if (b.textContent.includes(so.replace(/\./g,'').substring(0,4))) {
+    const orig = b.textContent;
+    b.textContent = '✓ Đã thêm'; b.style.background = '#2e7d32';
+    setTimeout(() => { b.textContent = orig; b.style.background = ''; }, 1500);
+  }});
+}
+
+function showPage(page) {
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('nav-'+page).classList.add('active');
+}
+
+// Init năm sinh select
+const selNam = document.getElementById('ptNamSinh');
+for (let y=2010; y>=1940; y--) {
+  const o = document.createElement('option');
+  o.value = y;
+  const menh = namSinhMenh[y];
+  o.textContent = `${y} ${menh ? '— Mệnh '+menhData[menh].label+' '+menhData[menh].emoji : ''}`;
+  selNam.appendChild(o);
+}
+
+selNam.addEventListener('change', function() {
+  const menh = calcMenh(this.value);
+  if (menh) {
+    selectedMenh = menh;
+    document.querySelectorAll('.menh-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.menh-btn').forEach(b => {
+      if (b.textContent.toLowerCase().includes(menhData[menh].label.toLowerCase())) b.classList.add('selected');
+    });
+  }
+});
+
+document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key==='Enter') filterSims(); });
+renderTable();
+</script>
+
+<!-- =================== ADMIN MODULE =================== -->
+<style>
+/* ADMIN LOGIN */
+.admin-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+.admin-overlay.show { display:flex; }
+.login-box { background:#fff; border-radius:14px; padding:36px 32px; width:360px; box-shadow:0 20px 60px rgba(0,0,0,0.3); text-align:center; }
+.login-box .logo-lg { font-size:32px; margin-bottom:8px; }
+.login-box h2 { font-size:18px; font-weight:800; color:var(--dark); margin-bottom:4px; }
+.login-box p { font-size:12px; color:var(--muted); margin-bottom:24px; }
+.login-field { text-align:left; margin-bottom:14px; }
+.login-field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase; }
+.login-field input { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px; outline:none; transition:border 0.2s; }
+.login-field input:focus { border-color:var(--red); }
+.login-err { color:var(--red); font-size:12px; margin-bottom:10px; display:none; }
+.btn-login-admin { width:100%; padding:12px; background:linear-gradient(135deg,var(--red),var(--red2)); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; margin-top:4px; }
+.btn-login-admin:hover { opacity:0.9; }
+.login-hint { font-size:11px; color:#bbb; margin-top:12px; }
+
+/* ADMIN PANEL */
+.admin-panel { display:none; position:fixed; inset:0; background:#f0f2f5; z-index:9998; overflow-y:auto; }
+.admin-panel.show { display:block; }
+.admin-topbar { background:linear-gradient(135deg,var(--dark),var(--dark2)); color:#fff; padding:0; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+.admin-topbar .abar { max-width:100%; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:54px; }
+.admin-logo { font-size:16px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; }
+.admin-logo span { color:var(--gold); }
+.admin-user { display:flex; align-items:center; gap:12px; font-size:13px; }
+.admin-user .avatar { width:32px; height:32px; background:var(--red); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+.btn-logout { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:5px 14px; border-radius:6px; font-family:inherit; font-size:12px; cursor:pointer; }
+.btn-logout:hover { background:rgba(255,255,255,0.25); }
+
+.admin-body { display:flex; min-height:calc(100vh - 54px); }
+.admin-sidebar { width:210px; background:#fff; border-right:1px solid var(--border); padding:16px 0; flex-shrink:0; }
+.admin-menu-item { padding:11px 20px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:500; cursor:pointer; color:var(--muted); transition:all 0.2s; border-left:3px solid transparent; }
+.admin-menu-item:hover { color:var(--red); background:#fff5f5; border-left-color:var(--red); }
+.admin-menu-item.active { color:var(--red); background:#fff5f5; border-left-color:var(--red); font-weight:700; }
+.admin-menu-item .mi { font-size:16px; width:20px; text-align:center; }
+.admin-sep { padding:10px 20px 4px; font-size:10px; font-weight:700; color:#ccc; text-transform:uppercase; letter-spacing:1px; }
+
+.admin-content { flex:1; padding:24px; overflow:auto; }
+
+/* STATS CARDS */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.stat-card { background:#fff; border-radius:10px; padding:18px; border:1px solid var(--border); display:flex; align-items:center; gap:14px; }
+.stat-icon { width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.stat-info h3 { font-size:22px; font-weight:800; color:var(--dark); }
+.stat-info p { font-size:12px; color:var(--muted); }
+.stat-info .trend { font-size:11px; font-weight:600; }
+.trend-up { color:#2e7d32; }
+.trend-down { color:var(--red); }
+
+/* ADMIN TABS */
+.admin-tab { display:none; }
+.admin-tab.active { display:block; }
+.tab-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.tab-header h2 { font-size:17px; font-weight:800; color:var(--dark); }
+.btn-add { background:var(--red); color:#fff; border:none; padding:9px 18px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; }
+.btn-add:hover { background:var(--red2); }
+
+/* UPLOAD ZONE */
+.upload-zone { border:2px dashed var(--border); border-radius:12px; padding:40px; text-align:center; background:#fff; transition:all 0.2s; cursor:pointer; }
+.upload-zone:hover, .upload-zone.drag { border-color:var(--red); background:#fff5f5; }
+.upload-zone .u-icon { font-size:48px; display:block; margin-bottom:12px; }
+.upload-zone h3 { font-size:15px; font-weight:700; margin-bottom:6px; color:var(--dark); }
+.upload-zone p { font-size:12px; color:var(--muted); margin-bottom:16px; }
+.btn-choose { background:var(--red); color:#fff; border:none; padding:10px 24px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; }
+.upload-template { margin-top:14px; font-size:11px; color:var(--muted); }
+.upload-template a { color:var(--red); text-decoration:none; font-weight:600; }
+
+.upload-preview { background:#fff; border-radius:10px; border:1px solid var(--border); padding:16px; margin-top:16px; display:none; }
+.upload-preview h4 { font-size:13px; font-weight:700; margin-bottom:12px; color:var(--dark); }
+.preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+.preview-table th { background:#f5f5f5; padding:8px 10px; text-align:left; font-weight:600; border-bottom:1px solid var(--border); }
+.preview-table td { padding:7px 10px; border-bottom:1px solid #f9f9f9; }
+.upload-actions { display:flex; gap:10px; margin-top:14px; }
+.btn-confirm { background:#2e7d32; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-cancel-up { background:#fff; border:1px solid var(--border); padding:10px 20px; border-radius:8px; font-family:inherit; font-size:13px; cursor:pointer; }
+
+/* SIM MANAGEMENT TABLE */
+.mgmt-toolbar { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+.mgmt-search { padding:9px 14px; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:13px; outline:none; width:220px; }
+.mgmt-select { padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:13px; outline:none; }
+.mgmt-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); font-size:13px; }
+.mgmt-table th { background:var(--dark2); color:#fff; padding:10px 12px; text-align:left; font-size:12px; }
+.mgmt-table td { padding:9px 12px; border-bottom:1px solid #f5f5f5; }
+.mgmt-table tr:hover td { background:#fff8f8; }
+.mgmt-table tr:last-child td { border-bottom:none; }
+.btn-edit { background:#e3f2fd; color:#1565c0; border:none; padding:4px 10px; border-radius:4px; font-family:inherit; font-size:11px; font-weight:600; cursor:pointer; margin-right:4px; }
+.btn-del { background:#ffebee; color:var(--red); border:none; padding:4px 10px; border-radius:4px; font-family:inherit; font-size:11px; font-weight:600; cursor:pointer; }
+.cb-sim { width:15px; height:15px; cursor:pointer; accent-color:var(--red); }
+.bulk-bar { display:none; background:#fff3e0; border:1px solid #ffcc80; border-radius:8px; padding:10px 14px; margin-bottom:10px; align-items:center; gap:12px; flex-wrap:wrap; }
+.bulk-bar.show { display:flex; }
+.bulk-count { font-size:13px; font-weight:700; color:#e65100; }
+.btn-bulk-del { background:var(--red); color:#fff; border:none; padding:7px 16px; border-radius:6px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; }
+.btn-bulk-del:hover { background:var(--red2); }
+.btn-bulk-cancel { background:#fff; border:1px solid var(--border); padding:7px 14px; border-radius:6px; font-family:inherit; font-size:13px; cursor:pointer; }
+.tr-selected td { background:#fff3e0 !important; }
+.status-badge { padding:3px 8px; border-radius:20px; font-size:10px; font-weight:700; }
+.status-on { background:#e8f5e9; color:#2e7d32; }
+.status-off { background:#ffebee; color:var(--red); }
+
+/* ADD/EDIT MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10000; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal-box { background:#fff; border-radius:12px; padding:28px; width:460px; max-width:95vw; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+.modal-box h3 { font-size:16px; font-weight:800; color:var(--dark); margin-bottom:20px; }
+.modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.modal-field { margin-bottom:4px; }
+.modal-field.full { grid-column:1/-1; }
+.modal-field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:4px; text-transform:uppercase; }
+.modal-field input, .modal-field select { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:13px; outline:none; }
+.modal-field input:focus, .modal-field select:focus { border-color:var(--red); }
+.modal-actions { display:flex; gap:10px; margin-top:20px; justify-content:flex-end; }
+.btn-save-sim { background:var(--red); color:#fff; border:none; padding:10px 24px; border-radius:8px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-modal-cancel { background:#fff; border:1px solid var(--border); padding:10px 20px; border-radius:8px; font-family:inherit; font-size:13px; cursor:pointer; }
+
+/* PRICE MANAGEMENT */
+.price-card { background:#fff; border-radius:10px; border:1px solid var(--border); padding:16px; margin-bottom:12px; display:flex; align-items:center; gap:16px; }
+.price-card .sim-no { font-size:16px; font-weight:800; color:var(--dark); flex:1; }
+.price-input-wrap { display:flex; align-items:center; gap:8px; }
+.price-input { width:130px; padding:8px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:14px; font-weight:700; color:var(--red); outline:none; }
+.price-input:focus { border-color:var(--red); }
+.btn-price-save { background:var(--gold); color:var(--dark); border:none; padding:8px 14px; border-radius:6px; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+
+/* CHART */
+.chart-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:20px; }
+.chart-card { background:#fff; border-radius:10px; border:1px solid var(--border); padding:20px; }
+.chart-card h4 { font-size:14px; font-weight:700; color:var(--dark); margin-bottom:16px; }
+.bar-chart { display:flex; align-items:flex-end; gap:8px; height:140px; }
+.bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.bar { width:100%; border-radius:4px 4px 0 0; transition:height 0.5s ease; min-height:4px; }
+.bar-label { font-size:10px; color:var(--muted); }
+.bar-val { font-size:10px; font-weight:700; color:var(--dark); }
+.donut-wrap { display:flex; flex-direction:column; gap:8px; }
+.donut-item { display:flex; align-items:center; gap:8px; font-size:12px; }
+.donut-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.order-table { width:100%; border-collapse:collapse; font-size:12px; }
+.order-table th { background:#f5f5f5; padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:var(--muted); }
+.order-table td { padding:8px 10px; border-bottom:1px solid #f9f9f9; }
+
+/* TOAST */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--dark); color:#fff; padding:12px 20px; border-radius:8px; font-size:13px; font-weight:500; z-index:99999; transform:translateY(100px); opacity:0; transition:all 0.3s; display:flex; align-items:center; gap:8px; }
+.toast.show { transform:translateY(0); opacity:1; }
+.toast.success { background:#2e7d32; }
+.toast.error { background:var(--red); }
+
+/* CONFIRM MODAL */
+.confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99999; align-items:center; justify-content:center; }
+.confirm-overlay.show { display:flex; }
+.confirm-box { background:#fff; border-radius:12px; padding:28px 28px 20px; width:360px; max-width:90vw; box-shadow:0 20px 50px rgba(0,0,0,0.25); text-align:center; }
+.confirm-icon { font-size:36px; margin-bottom:10px; }
+.confirm-box h3 { font-size:16px; font-weight:800; color:var(--dark); margin-bottom:8px; }
+.confirm-box p { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.5; }
+.confirm-actions { display:flex; gap:10px; justify-content:center; }
+.btn-confirm-yes { background:var(--red); color:#fff; border:none; padding:10px 28px; border-radius:8px; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+.btn-confirm-yes:hover { background:var(--red2); }
+.btn-confirm-no { background:#fff; border:1.5px solid var(--border); padding:10px 20px; border-radius:8px; font-family:inherit; font-size:14px; cursor:pointer; }
+.btn-confirm-no:hover { border-color:#999; }
+</style>
+
+<!-- ADMIN LOGIN OVERLAY -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="login-box">
+    <div class="logo-lg">🔐</div>
+    <h2>Trang Quản Trị Admin</h2>
+    <p>Đăng nhập để quản lý hệ thống sim số đẹp</p>
+    <div class="login-field">
+      <label>Tên đăng nhập</label>
+      <input type="text" id="adminUser" placeholder="Nhập username..." onkeypress="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="login-field">
+      <label>Mật khẩu</label>
+      <input type="password" id="adminPass" placeholder="Nhập mật khẩu..." onkeypress="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="login-err" id="loginErr">❌ Sai tên đăng nhập hoặc mật khẩu!</div>
+    <button class="btn-login-admin" onclick="adminLogin()">🔑 Đăng nhập</button>
+    <div class="login-hint">Tài khoản demo: <strong>admin</strong> / <strong>admin123</strong></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-topbar">
+    <div class="abar">
+      <div class="admin-logo">📊 Sim<span>ĐẸP</span> — Quản Trị</div>
+      <div class="admin-user">
+        <div class="avatar">A</div>
+        <span>Admin</span>
+        <button class="btn-logout" onclick="adminLogout()">Đăng xuất</button>
+      </div>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="admin-sep">Tổng quan</div>
+      <div class="admin-menu-item active" onclick="switchTab('dashboard',this)"><span class="mi">📊</span> Dashboard</div>
+      <div class="admin-sep">Quản lý</div>
+      <div class="admin-menu-item" onclick="switchTab('upload',this)"><span class="mi">📤</span> Upload Sim</div>
+      <div class="admin-menu-item" onclick="switchTab('manage',this)"><span class="mi">📋</span> Danh sách Sim</div>
+      <div class="admin-menu-item" onclick="switchTab('price',this)"><span class="mi">💰</span> Quản lý Giá</div>
+      <div class="admin-menu-item" onclick="switchTab('orders',this)"><span class="mi">🛒</span> Đơn hàng</div>
+      <div class="admin-sep">Tài khoản</div>
+      <div class="admin-menu-item" onclick="switchTab('password',this)"><span class="mi">🔑</span> Đổi mật khẩu</div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="admin-tab active" id="tab-dashboard">
+        <div class="tab-header"><h2>📊 Tổng quan hệ thống</h2><span style="font-size:12px;color:var(--muted)">Cập nhật: hôm nay</span></div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fff3e0">📱</div>
+            <div class="stat-info"><h3 id="totalSim">20</h3><p>Tổng sim trong kho</p><span class="trend trend-up">↑ +5 hôm nay</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#e8f5e9">🛒</div>
+            <div class="stat-info"><h3>12</h3><p>Đơn hàng hôm nay</p><span class="trend trend-up">↑ +3 so hôm qua</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#e3f2fd">💵</div>
+            <div class="stat-info"><h3>48.5tr</h3><p>Doanh thu tháng</p><span class="trend trend-up">↑ +12%</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fce4ec">👥</div>
+            <div class="stat-info"><h3>284</h3><p>Lượt xem hôm nay</p><span class="trend trend-down">↓ -5%</span></div>
+          </div>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>📈 Doanh thu 7 ngày gần nhất (triệu đồng)</h4>
+            <div class="bar-chart" id="barChart"></div>
+          </div>
+          <div class="chart-card">
+            <h4>🥧 Phân bố nhà mạng</h4>
+            <div class="donut-wrap" style="margin-top:10px;">
+              <div class="donut-item"><div class="donut-dot" style="background:#e53935"></div><span>Viettel — <strong>42%</strong></span></div>
+              <div class="donut-item"><div class="donut-dot" style="background:#1565c0"></div><span>Vinaphone — <strong>31%</strong></span></div>
+              <div class="donut-item"><div class="donut-dot" style="background:#c62828"></div><span>Mobifone — <strong>27%</strong></span></div>
+            </div>
+            <div style="margin-top:16px;">
+              <h4 style="margin-bottom:8px;">📦 Danh mục bán chạy</h4>
+              <div class="donut-item"><div class="donut-dot" style="background:var(--gold)"></div><span>Phong Thủy — <strong>28%</strong></span></div>
+              <div class="donut-item"><div class="donut-dot" style="background:#66bb6a"></div><span>Tam Hoa — <strong>22%</strong></span></div>
+              <div class="donut-item"><div class="donut-dot" style="background:#42a5f5"></div><span>Tứ Quý — <strong>18%</strong></span></div>
+              <div class="donut-item"><div class="donut-dot" style="background:#ab47bc"></div><span>Khác — <strong>32%</strong></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h4>🛒 Đơn hàng mới nhất</h4>
+          <table class="order-table" style="margin-top:8px;">
+            <thead><tr><th>Mã đơn</th><th>Số sim</th><th>Khách hàng</th><th>Giá</th><th>Trạng thái</th></tr></thead>
+            <tbody id="recentOrders"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="admin-tab" id="tab-upload">
+        <div class="tab-header"><h2>📤 Upload danh sách Sim</h2></div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+          <span class="u-icon">📂</span>
+          <h3>Kéo thả file vào đây</h3>
+          <p>Hỗ trợ file <strong>Excel (.xlsx, .xls)</strong> hoặc <strong>CSV (.csv)</strong></p>
+          <button class="btn-choose" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Chọn file từ máy tính</button>
+          <div class="upload-template">
+            📊 <a href="#" onclick="downloadTemplate(event)">Tải file mẫu (.xlsx)</a> để điền đúng định dạng
+          </div>
+        </div>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileUpload(event)">
+
+        <div class="upload-preview" id="uploadPreview">
+          <h4 id="previewTitle">✅ Xem trước dữ liệu</h4>
+          <table class="preview-table">
+            <thead><tr><th>Số Sim</th><th>Nhà mạng</th><th>Danh mục</th><th>Giá bán</th><th>Gói cước</th></tr></thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+          <div class="upload-actions">
+            <button class="btn-confirm" onclick="confirmUpload()">✅ Xác nhận import <span id="importCount"></span> sim</button>
+            <button class="btn-cancel-up" onclick="cancelUpload()">Hủy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANAGE SIMS -->
+      <div class="admin-tab" id="tab-manage">
+        <div class="tab-header">
+          <h2>📋 Danh sách Sim (<span id="mgmtCount">0</span>)</h2>
+          <button class="btn-add" onclick="openAddModal()">➕ Thêm sim mới</button>
+        </div>
+        <div class="mgmt-toolbar">
+          <input class="mgmt-search" type="text" placeholder="🔍 Tìm số sim..." oninput="renderMgmtTable()">
+          <select class="mgmt-select" onchange="renderMgmtTable()" id="mgmtMangFilter">
+            <option value="">Tất cả nhà mạng</option>
+            <option value="viettel">Viettel</option>
+            <option value="vinaphone">Vinaphone</option>
+            <option value="mobifone">Mobifone</option>
+          </select>
+          <select class="mgmt-select" onchange="renderMgmtTable()" id="mgmtCatFilter">
+            <option value="">Tất cả danh mục</option>
+            <option>Sim VIP</option><option>Tam Hoa</option><option>Tứ Quý</option>
+            <option>Phong Thủy</option><option>Ngũ Quý</option><option>Lộc Phát</option>
+            <option>Thần Tài</option><option>Số lặp</option><option>Năm sinh</option>
+          </select>
+        </div>
+        <div class="bulk-bar" id="bulkBar">
+          <span class="bulk-count">✅ Đã chọn <span id="selectedCount">0</span> sim</span>
+          <button class="btn-bulk-del" onclick="bulkDelete()">🗑️ Xóa hàng loạt</button>
+          <button class="btn-bulk-cancel" onclick="clearSelection()">✕ Bỏ chọn</button>
+        </div>
+        <table class="mgmt-table">
+          <thead><tr>
+            <th style="width:36px"><input type="checkbox" class="cb-sim" id="cbAll" onclick="toggleAll(this)" title="Chọn tất cả"></th>
+            <th>#</th><th>Số Sim</th><th>Nhà mạng</th><th>Danh mục</th><th>Giá bán</th><th>Gói cước</th><th>Trạng thái</th><th>Thao tác</th>
+          </tr></thead>
+          <tbody id="mgmtBody"></tbody>
+        </table>
+      </div>
+
+      <!-- PRICE MANAGEMENT -->
+      <div class="admin-tab" id="tab-price">
+        <div class="tab-header"><h2>💰 Quản lý giá Sim</h2><span style="font-size:12px;color:var(--muted)">Click vào ô giá để chỉnh sửa</span></div>
+        <div style="background:#fff3e0;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#e65100;">
+          💡 Nhập giá mới → nhấn <strong>Lưu</strong> để cập nhật. Giá tính bằng <strong>VNĐ</strong>
+        </div>
+        <div id="priceList"></div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="admin-tab" id="tab-orders">
+        <div class="tab-header"><h2>🛒 Quản lý đơn hàng</h2></div>
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px;">
+          <div class="stat-card"><div class="stat-icon" style="background:#fff3e0">⏳</div><div class="stat-info"><h3>4</h3><p>Chờ xác nhận</p></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:#e8f5e9">✅</div><div class="stat-info"><h3>7</h3><p>Đã hoàn thành</p></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:#fce4ec">❌</div><div class="stat-info"><h3>1</h3><p>Đã hủy</p></div></div>
+        </div>
+        <table class="mgmt-table">
+          <thead><tr><th>Mã đơn</th><th>Số sim</th><th>Khách hàng</th><th>SĐT</th><th>Giá</th><th>Ngày đặt</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+
+      <!-- ĐỔI MẬT KHẨU -->
+      <div class="admin-tab" id="tab-password">
+        <div class="tab-header"><h2>🔑 Đổi mật khẩu</h2></div>
+        <div style="max-width:460px;">
+          <div style="background:#e3f2fd; border-left:3px solid #1565c0; border-radius:0 8px 8px 0; padding:10px 14px; font-size:12px; color:#1565c0; margin-bottom:20px;">
+            💡 Mật khẩu mới sẽ có hiệu lực ngay sau khi lưu. Hãy ghi nhớ mật khẩu mới của bạn.
+          </div>
+          <div class="filter-box" style="border-radius:10px; overflow:hidden;">
+            <div class="filter-title" style="padding:14px 18px;">🔑 Thay đổi mật khẩu tài khoản</div>
+            <div style="padding:20px;">
+              <div class="form-row" style="margin-bottom:14px;">
+                <label style="display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase;">Tên đăng nhập</label>
+                <input type="text" id="pwUser" style="width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:13px; outline:none; background:#f9f9f9;" readonly>
+              </div>
+              <div class="form-row" style="margin-bottom:14px;">
+                <label style="display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase;">Mật khẩu hiện tại *</label>
+                <div style="position:relative;">
+                  <input type="password" id="pwCurrent" placeholder="Nhập mật khẩu hiện tại..." style="width:100%; padding:9px 40px 9px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:13px; outline:none;">
+                  <span onclick="togglePw('pwCurrent',this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px; user-select:none;">👁️</span>
+                </div>
+              </div>
+              <div class="form-row" style="margin-bottom:14px;">
+                <label style="display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase;">Mật khẩu mới *</label>
+                <div style="position:relative;">
+                  <input type="password" id="pwNew" placeholder="Tối thiểu 6 ký tự..." oninput="checkPwStrength(this.value)" style="width:100%; padding:9px 40px 9px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:13px; outline:none;">
+                  <span onclick="togglePw('pwNew',this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px; user-select:none;">👁️</span>
+                </div>
+                <div id="pwStrengthBar" style="margin-top:6px; display:none;">
+                  <div style="height:4px; border-radius:2px; background:#f0f0f0; overflow:hidden;">
+                    <div id="pwStrengthFill" style="height:4px; border-radius:2px; transition:all 0.3s;"></div>
+                  </div>
+                  <div id="pwStrengthText" style="font-size:11px; margin-top:3px;"></div>
+                </div>
+              </div>
+              <div class="form-row" style="margin-bottom:20px;">
+                <label style="display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase;">Xác nhận mật khẩu mới *</label>
+                <div style="position:relative;">
+                  <input type="password" id="pwConfirm" placeholder="Nhập lại mật khẩu mới..." style="width:100%; padding:9px 40px 9px 12px; border:1.5px solid var(--border); border-radius:6px; font-family:inherit; font-size:13px; outline:none;">
+                  <span onclick="togglePw('pwConfirm',this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px; user-select:none;">👁️</span>
+                </div>
+              </div>
+              <div id="pwError" style="display:none; background:#ffebee; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:8px 12px; font-size:12px; color:var(--red); margin-bottom:14px;"></div>
+              <button onclick="savePassword()" style="width:100%; padding:12px; background:linear-gradient(135deg,var(--red),var(--red2)); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;">
+                💾 Lưu mật khẩu mới
+              </button>
+            </div>
+          </div>
+
+          <!-- Danh sách tài khoản -->
+          <div class="filter-box" style="border-radius:10px; overflow:hidden; margin-top:16px;">
+            <div class="filter-title" style="padding:14px 18px;">👥 Danh sách tài khoản Admin</div>
+            <div style="padding:16px;" id="accountList"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL THÊM/SỬA SIM -->
+<div class="modal-overlay" id="simModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">➕ Thêm Sim Mới</h3>
+    <div class="modal-grid">
+      <div class="modal-field full"><label>Số Sim *</label><input type="text" id="mSimSo" placeholder="VD: 0912.345.678"></div>
+      <div class="modal-field"><label>Nhà mạng *</label>
+        <select id="mSimMang"><option value="viettel">Viettel</option><option value="vinaphone">Vinaphone</option><option value="mobifone">Mobifone</option></select>
+      </div>
+      <div class="modal-field"><label>Danh mục</label>
+        <select id="mSimCat"><option>Sim VIP</option><option>Tam Hoa</option><option>Tứ Quý</option><option>Phong Thủy</option><option>Ngũ Quý</option><option>Lộc Phát</option><option>Thần Tài</option><option>Số lặp</option><option>Năm sinh</option></select>
+      </div>
+      <div class="modal-field"><label>Giá bán (VNĐ) *</label><input type="number" id="mSimGia" placeholder="VD: 500000"></div>
+      <div class="modal-field"><label>Gói cước</label>
+        <select id="mSimGoi"><option>Trả trước</option><option>Trả sau</option></select>
+      </div>
+      <div class="modal-field"><label>Mệnh phong thủy</label>
+        <select id="mSimMenh"><option value="kim">Kim</option><option value="moc">Mộc</option><option value="thuy">Thủy</option><option value="hoa">Hỏa</option><option value="tho">Thổ</option></select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Hủy</button>
+      <button class="btn-save-sim" onclick="saveSim()">💾 Lưu sim</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN TRIGGER BUTTON -->
+<button onclick="document.getElementById('adminOverlay').classList.add('show')" style="position:fixed;bottom:20px;right:20px;background:var(--dark2);color:#fff;border:none;padding:11px 16px;border-radius:50px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.3);z-index:1000;display:flex;align-items:center;gap:6px;">
+  🔐 Admin
+</button>
+
+<script>
+// ===== ADMIN AUTH =====
+const ADMIN_ACCOUNTS = [{ user:'admin', pass:'admin123' }, { user:'manager', pass:'sim2025' }];
+
+function adminLogin() {
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  const ok = ADMIN_ACCOUNTS.find(a => a.user===u && a.pass===p);
+  if (ok) {
+    currentAdminUser = u;
+    document.getElementById('adminOverlay').classList.remove('show');
+    document.getElementById('adminPanel').classList.add('show');
+    initAdminPanel();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('adminPass').value = '';
+  }
+}
+
+function adminLogout() {
+  document.getElementById('adminPanel').classList.remove('show');
+  document.getElementById('adminUser').value = '';
+  document.getElementById('adminPass').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+  showToast('Đã đăng xuất thành công', 'success');
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-menu-item').forEach(m => m.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  el.classList.add('active');
+  if (tab === 'password') initPasswordTab();
+}
+
+// ===== ADMIN DATA (dùng chung simData từ trên) =====
+let adminSims = [...simData];
+let editIndex = -1;
+let pendingUpload = [];
+
+// Fake orders data
+const fakeOrders = [
+  { id:'#DH001', sim:'0912.888.999', kh:'Nguyễn Văn A', sdt:'0901234567', gia:45000000, ngay:'31/05/2025', tt:'Chờ xác nhận' },
+  { id:'#DH002', sim:'0988.666.888', kh:'Trần Thị B', sdt:'0912345678', gia:8500000, ngay:'31/05/2025', tt:'Hoàn thành' },
+  { id:'#DH003', sim:'0914.789.789', kh:'Lê Văn C', sdt:'0923456789', gia:3200000, ngay:'30/05/2025', tt:'Hoàn thành' },
+  { id:'#DH004', sim:'0908.1991.99', kh:'Phạm Thị D', sdt:'0934567890', gia:1500000, ngay:'30/05/2025', tt:'Đã hủy' },
+  { id:'#DH005', sim:'0977.77.8888', kh:'Hoàng Văn E', sdt:'0945678901', gia:19500000, ngay:'29/05/2025', tt:'Chờ xác nhận' },
+  { id:'#DH006', sim:'0362.88.0000', kh:'Võ Thị F', sdt:'0956789012', gia:35000000, ngay:'29/05/2025', tt:'Hoàn thành' },
+  { id:'#DH007', sim:'0939.68.6868', kh:'Đặng Văn G', sdt:'0967890123', gia:12500000, ngay:'28/05/2025', tt:'Chờ xác nhận' },
+  { id:'#DH008', sim:'0799.999.666', kh:'Bùi Thị H', sdt:'0978901234', gia:22000000, ngay:'28/05/2025', tt:'Hoàn thành' },
+];
+
+function initAdminPanel() {
+  renderBarChart();
+  renderRecentOrders();
+  renderMgmtTable();
+  renderPriceList();
+  renderOrdersTable();
+  document.getElementById('totalSim').textContent = adminSims.length;
+  document.getElementById('mgmtCount').textContent = adminSims.length;
+}
+
+// BAR CHART
+function renderBarChart() {
+  const days = ['T2','T3','T4','T5','T6','T7','CN'];
+  const vals = [4.2, 6.8, 3.5, 8.1, 5.4, 12.3, 7.9];
+  const max = Math.max(...vals);
+  const colors = ['#e53935','#f9a825','#2e7d32','#1565c0','#7b1fa2','#e53935','#f57f17'];
+  document.getElementById('barChart').innerHTML = days.map((d,i) => `
+    <div class="bar-wrap">
+      <div class="bar-val">${vals[i]}tr</div>
+      <div class="bar" style="height:${(vals[i]/max)*110}px;background:${colors[i]};"></div>
+      <div class="bar-label">${d}</div>
+    </div>
+  `).join('');
+}
+
+function renderRecentOrders() {
+  document.getElementById('recentOrders').innerHTML = fakeOrders.slice(0,5).map(o => `
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.sim}</td>
+      <td>${o.kh}</td>
+      <td style="color:var(--red);font-weight:700;">${formatPrice(o.gia)}</td>
+      <td><span class="status-badge ${o.tt==='Hoàn thành'?'status-on':o.tt==='Đã hủy'?'status-off':''}">
+        ${o.tt==='Hoàn thành'?'✅':o.tt==='Đã hủy'?'❌':'⏳'} ${o.tt}</span></td>
+    </tr>
+  `).join('');
+}
+
+// MANAGE TABLE
+let selectedSims = new Set();
+
+function renderMgmtTable() {
+  const q = document.querySelector('.mgmt-search')?.value.toLowerCase()||'';
+  const mang = document.getElementById('mgmtMangFilter')?.value||'';
+  const cat = document.getElementById('mgmtCatFilter')?.value||'';
+  const list = adminSims.filter(s =>
+    (!q || s.so.replace(/\./g,'').includes(q.replace(/\./g,''))) &&
+    (!mang || s.mang===mang) &&
+    (!cat || s.cat===cat)
+  );
+  document.getElementById('mgmtCount').textContent = list.length;
+  const mangLabel = {viettel:'Viettel',vinaphone:'Vinaphone',mobifone:'Mobifone'};
+  document.getElementById('mgmtBody').innerHTML = list.map((s,i) => {
+    const realIdx = adminSims.indexOf(s);
+    const checked = selectedSims.has(s.so);
+    return `
+    <tr class="${checked?'tr-selected':''}" id="row_${realIdx}">
+      <td><input type="checkbox" class="cb-sim" data-so="${s.so}" ${checked?'checked':''} onchange="toggleRow(this)"></td>
+      <td style="color:var(--muted);font-weight:600;">${i+1}</td>
+      <td><strong>${s.so}</strong></td>
+      <td><span class="nhamang ${s.mang}">${mangLabel[s.mang]||s.mang}</span></td>
+      <td><span class="cat-badge">${s.cat}</span></td>
+      <td style="color:var(--red);font-weight:700;">${formatPrice(s.gia)}</td>
+      <td>${s.goi}</td>
+      <td><span class="status-badge status-on">● Còn hàng</span></td>
+      <td>
+        <button class="btn-edit" onclick="openEditModal(${realIdx})">✏️ Sửa</button>
+        <button class="btn-del" onclick="deleteSim(${realIdx})">🗑️ Xóa</button>
+      </td>
+    </tr>`;
+  }).join('');
+  updateBulkBar();
+  // Sync cbAll
+  const cbs = document.querySelectorAll('#mgmtBody .cb-sim');
+  const cbAll = document.getElementById('cbAll');
+  if (cbAll && cbs.length > 0) cbAll.checked = [...cbs].every(c => c.checked);
+}
+
+function toggleRow(cb) {
+  const so = cb.dataset.so;
+  if (cb.checked) selectedSims.add(so);
+  else selectedSims.delete(so);
+  const tr = cb.closest('tr');
+  if (tr) tr.classList.toggle('tr-selected', cb.checked);
+  updateBulkBar();
+  // Sync cbAll
+  const cbs = document.querySelectorAll('#mgmtBody .cb-sim');
+  const cbAll = document.getElementById('cbAll');
+  if (cbAll) cbAll.checked = cbs.length > 0 && [...cbs].every(c => c.checked);
+}
+
+function toggleAll(cbAll) {
+  document.querySelectorAll('#mgmtBody .cb-sim').forEach(cb => {
+    cb.checked = cbAll.checked;
+    const so = cb.dataset.so;
+    if (cbAll.checked) selectedSims.add(so);
+    else selectedSims.delete(so);
+    const tr = cb.closest('tr');
+    if (tr) tr.classList.toggle('tr-selected', cbAll.checked);
+  });
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulkBar');
+  const cnt = document.getElementById('selectedCount');
+  if (!bar) return;
+  if (selectedSims.size > 0) { bar.classList.add('show'); cnt.textContent = selectedSims.size; }
+  else { bar.classList.remove('show'); }
+}
+
+function clearSelection() {
+  selectedSims.clear();
+  document.querySelectorAll('#mgmtBody .cb-sim').forEach(cb => { cb.checked = false; cb.closest('tr')?.classList.remove('tr-selected'); });
+  const cbAll = document.getElementById('cbAll');
+  if (cbAll) cbAll.checked = false;
+  updateBulkBar();
+}
+
+async function bulkDelete() {
+  const count = selectedSims.size;
+  if (count === 0) { showToast('⚠️ Chưa chọn sim nào!','error'); return; }
+  const ok = await showConfirm(
+    'Xóa ' + count + ' sim đã chọn?',
+    'Hành động này không thể hoàn tác. Tất cả ' + count + ' sim được chọn sẽ bị xóa vĩnh viễn.',
+    '🗑️', 'Xóa ' + count + ' sim'
+  );
+  if (!ok) return;
+
+  const toDeleteNorm = new Set([...selectedSims].map(s => s.replace(/\./g,'')));
+  const beforeAdmin = adminSims.length;
+  adminSims = adminSims.filter(s => !toDeleteNorm.has(s.so.replace(/\./g,'')));
+  for (let i = simData.length - 1; i >= 0; i--) {
+    if (toDeleteNorm.has(simData[i].so.replace(/\./g,''))) simData.splice(i, 1);
+  }
+  const deleted = beforeAdmin - adminSims.length;
+  selectedSims.clear();
+  filtered = [...simData];
+  renderTable();
+  renderMgmtTable();
+  renderPriceList();
+  document.getElementById('totalSim').textContent = adminSims.length;
+  if (deleted > 0) showToast('🗑️ Đã xóa ' + deleted + ' sim thành công!', 'success');
+  else showToast('⚠️ Không xóa được!', 'error');
+}
+
+// PRICE LIST
+function renderPriceList() {
+  document.getElementById('priceList').innerHTML = adminSims.map((s,i) => `
+    <div class="price-card">
+      <div>
+        <div class="sim-no">${s.so}</div>
+        <span class="nhamang ${s.mang}">${{viettel:'Viettel',vinaphone:'Vinaphone',mobifone:'Mobifone'}[s.mang]}</span>
+        <span class="cat-badge" style="margin-left:6px">${s.cat}</span>
+      </div>
+      <div class="price-input-wrap">
+        <span style="font-size:12px;color:var(--muted)">Giá:</span>
+        <input class="price-input" type="number" value="${s.gia}" id="price_${i}">
+        <button class="btn-price-save" onclick="savePrice(${i})">💾 Lưu</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function savePrice(i) {
+  const newPrice = parseInt(document.getElementById('price_'+i).value);
+  if (!newPrice || newPrice < 0) { showToast('Giá không hợp lệ!','error'); return; }
+  adminSims[i].gia = newPrice;
+  const idx = simData.findIndex(s => s.so === adminSims[i].so);
+  if (idx >= 0) simData[idx].gia = newPrice;
+  showToast('✅ Đã cập nhật giá ' + adminSims[i].so, 'success');
+}
+
+// ORDERS TABLE
+function renderOrdersTable() {
+  const statusColor = { 'Hoàn thành':'status-on', 'Đã hủy':'status-off', 'Chờ xác nhận':'' };
+  const statusIcon = { 'Hoàn thành':'✅', 'Đã hủy':'❌', 'Chờ xác nhận':'⏳' };
+  document.getElementById('ordersBody').innerHTML = fakeOrders.map(o => `
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td><strong>${o.sim}</strong></td>
+      <td>${o.kh}</td>
+      <td>${o.sdt}</td>
+      <td style="color:var(--red);font-weight:700;">${formatPrice(o.gia)}</td>
+      <td>${o.ngay}</td>
+      <td><span class="status-badge ${statusColor[o.tt]}">${statusIcon[o.tt]} ${o.tt}</span></td>
+      <td>
+        ${o.tt==='Chờ xác nhận'?`<button class="btn-edit" onclick="confirmOrder('${o.id}')">✅ Duyệt</button>`:''}
+        ${o.tt!=='Đã hủy'?`<button class="btn-del" onclick="cancelOrder('${o.id}')">❌ Hủy</button>`:''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function confirmOrder(id) { showToast('✅ Đã xác nhận đơn hàng '+id,'success'); }
+function cancelOrder(id) { showToast('❌ Đã hủy đơn hàng '+id,'error'); }
+
+// MODAL ADD/EDIT
+function openAddModal() {
+  editIndex = -1;
+  document.getElementById('modalTitle').textContent = '➕ Thêm Sim Mới';
+  document.getElementById('mSimSo').value = '';
+  document.getElementById('mSimMang').value = 'viettel';
+  document.getElementById('mSimCat').value = 'Sim VIP';
+  document.getElementById('mSimGia').value = '';
+  document.getElementById('mSimGoi').value = 'Trả trước';
+  document.getElementById('mSimMenh').value = 'kim';
+  document.getElementById('simModal').classList.add('show');
+}
+
+function openEditModal(i) {
+  editIndex = i;
+  const s = adminSims[i];
+  document.getElementById('modalTitle').textContent = '✏️ Sửa Sim — '+s.so;
+  document.getElementById('mSimSo').value = s.so;
+  document.getElementById('mSimMang').value = s.mang;
+  document.getElementById('mSimCat').value = s.cat;
+  document.getElementById('mSimGia').value = s.gia;
+  document.getElementById('mSimGoi').value = s.goi;
+  document.getElementById('mSimMenh').value = s.menh||'kim';
+  document.getElementById('simModal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('simModal').classList.remove('show'); }
+
+function saveSim() {
+  const so = document.getElementById('mSimSo').value.trim();
+  const gia = parseInt(document.getElementById('mSimGia').value);
+  if (!so) { showToast('Vui lòng nhập số sim!','error'); return; }
+  if (!gia || gia <= 0) { showToast('Vui lòng nhập giá hợp lệ!','error'); return; }
+  const newSim = {
+    so, mang: document.getElementById('mSimMang').value,
+    cat: document.getElementById('mSimCat').value,
+    gia, goi: document.getElementById('mSimGoi').value,
+    menh: document.getElementById('mSimMenh').value
+  };
+  if (editIndex >= 0) {
+    adminSims[editIndex] = newSim;
+    const idx = simData.findIndex(s => s.so === so);
+    if (idx >= 0) simData[idx] = newSim; else simData.push(newSim);
+    showToast('✅ Đã cập nhật sim '+so,'success');
+  } else {
+    adminSims.unshift(newSim);
+    simData.unshift(newSim);
+    showToast('✅ Đã thêm sim mới: '+so,'success');
+  }
+  closeModal();
+  renderMgmtTable();
+  renderPriceList();
+  document.getElementById('totalSim').textContent = adminSims.length;
+  filtered = [...simData]; renderTable();
+}
+
+async function deleteSim(i) {
+  if (i < 0 || i >= adminSims.length) { showToast('❌ Không tìm thấy sim!','error'); return; }
+  const so = adminSims[i].so;
+  const ok = await showConfirm('Xóa sim này?', 'Sim ' + so + ' sẽ bị xóa vĩnh viễn.', '🗑️', 'Xóa sim');
+  if (!ok) return;
+  adminSims.splice(i, 1);
+  const soNorm = so.replace(/\./g,'');
+  for (let j = simData.length - 1; j >= 0; j--) {
+    if (simData[j].so.replace(/\./g,'') === soNorm) { simData.splice(j, 1); break; }
+  }
+  selectedSims.delete(so);
+  filtered = [...simData];
+  renderTable();
+  renderMgmtTable();
+  renderPriceList();
+  document.getElementById('totalSim').textContent = adminSims.length;
+  showToast('🗑️ Đã xóa sim ' + so, 'success');
+}
+
+// FILE UPLOAD
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  processUploadFile(file);
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file = event.dataTransfer.files[0];
+  if (file) processUploadFile(file);
+}
+
+function processUploadFile(file) {
+  const name = file.name.toLowerCase();
+  if (!name.endsWith('.csv') && !name.endsWith('.xlsx') && !name.endsWith('.xls')) {
+    showToast('❌ Chỉ hỗ trợ file .csv hoặc .xlsx','error'); return;
+  }
+  const doRead = () => _readFileWithXLSX(file);
+  if (typeof XLSX === 'undefined') {
+    showToast('⏳ Đang tải thư viện đọc file...','');
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload = doRead;
+    s.onerror = () => showToast('❌ Không tải được thư viện XLSX!','error');
+    document.head.appendChild(s);
+  } else { doRead(); }
+}
+
+function _readFileWithXLSX(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+      if (!rows || rows.length === 0) {
+        showToast('❌ File không có dữ liệu!', 'error'); return;
+      }
+      const mangMap = {
+        'viettel':'viettel','vinaphone':'vinaphone','mobifone':'mobifone',
+        'Viettel':'viettel','Vinaphone':'vinaphone','Mobifone':'mobifone'
+      };
+      const menhMap = {
+        'kim':'kim','moc':'moc','thuy':'thuy','hoa':'hoa','tho':'tho',
+        'Kim':'kim','Mộc':'moc','Thủy':'thuy','Hỏa':'hoa','Thổ':'tho'
+      };
+      const parsed = [];
+      const errors = [];
+      rows.forEach((row, i) => {
+        const so   = String(row['Số Sim'] || row['so_sim'] || row['So Sim'] || '').trim();
+        const mang = String(row['Nhà Mạng'] || row['nha_mang'] || row['Nha Mang'] || '').trim();
+        const cat  = String(row['Danh Mục'] || row['danh_muc'] || row['Danh Muc'] || row['Danh mục'] || '').trim();
+        const giaRaw = row['Giá Bán (VNĐ)'] || row['gia_ban'] || row['Gia Ban'] || row['Giá Bán'] || 0;
+        const goi  = String(row['Gói Cước'] || row['goi_cuoc'] || row['Goi Cuoc'] || 'Trả trước').trim();
+        const menh = String(row['Mệnh Phong Thủy'] || row['menh'] || row['Menh'] || 'kim').trim();
+        if (!so) { errors.push(`Dòng ${i+2}: thiếu số sim`); return; }
+        const gia = parseInt(String(giaRaw).replace(/[^\d]/g,'')) || 0;
+        parsed.push({ so, mang: mangMap[mang]||'viettel', cat: cat||'Phong Thủy', gia, goi, menh: menhMap[menh]||'kim' });
+      });
+      if (parsed.length === 0) {
+        showToast('❌ Không đọc được dữ liệu! Kiểm tra lại tên cột.', 'error'); return;
+      }
+      pendingUpload = parsed;
+      const mangLabel = {viettel:'Viettel',vinaphone:'Vinaphone',mobifone:'Mobifone'};
+      document.getElementById('previewBody').innerHTML = parsed.map(s => `
+        <tr>
+          <td><strong>${s.so}</strong></td>
+          <td><span class="nhamang ${s.mang}">${mangLabel[s.mang]||s.mang}</span></td>
+          <td>${s.cat}</td>
+          <td style="color:var(--red);font-weight:700;">${formatPrice(s.gia)}</td>
+          <td>${s.goi}</td>
+        </tr>
+      `).join('');
+      document.getElementById('previewTitle').textContent = `✅ Xem trước: ${file.name}`;
+      document.getElementById('importCount').textContent = parsed.length;
+      document.getElementById('uploadPreview').style.display = 'block';
+      if (errors.length > 0) showToast(`⚠️ ${errors.length} dòng lỗi bị bỏ qua`, 'error');
+      else showToast(`✅ Đọc được ${parsed.length} sim từ file!`, 'success');
+    } catch(err) {
+      showToast('❌ Lỗi đọc file: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function confirmUpload() {
+  adminSims = [...pendingUpload, ...adminSims];
+  simData.unshift(...pendingUpload);
+  filtered = [...simData];
+  renderTable();
+  renderMgmtTable();
+  renderPriceList();
+  document.getElementById('totalSim').textContent = adminSims.length;
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  pendingUpload = [];
+  showToast('✅ Đã import thành công!','success');
+}
+
+function cancelUpload() {
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  pendingUpload = [];
+}
+
+function downloadTemplate(e) {
+  e.preventDefault(); e.stopPropagation();
+  // Load SheetJS nếu chưa có
+  if (typeof XLSX === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    script.onload = () => _doDownloadXLSX();
+    document.head.appendChild(script);
+  } else {
+    _doDownloadXLSX();
+  }
+}
+
+function _doDownloadXLSX() {
+  const headers = [['Số Sim','Nhà Mạng','Danh Mục','Giá Bán (VNĐ)','Gói Cước','Mệnh Phong Thủy']];
+  const rows = [
+    ['0912.345.678','viettel','Phong Thủy',500000,'Trả trước','kim'],
+    ['0988.111.222','vinaphone','Tam Hoa',800000,'Trả sau','moc'],
+    ['0939.686.868','mobifone','Lộc Phát',1200000,'Trả trước','hoa'],
+    ['0977.999.888','viettel','Tứ Quý',3500000,'Trả trước','tho'],
+    ['0914.789.012','vinaphone','Năm sinh',450000,'Trả sau','thuy'],
+  ];
+
+  const wsData = [...headers, ...rows];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Độ rộng cột
+  ws['!cols'] = [
+    {wch:16},{wch:12},{wch:14},{wch:18},{wch:12},{wch:18}
+  ];
+
+  // Tô màu header (style cơ bản)
+  const headerRange = XLSX.utils.decode_range('A1:F1');
+  for (let C = headerRange.s.c; C <= headerRange.e.c; C++) {
+    const cell = ws[XLSX.utils.encode_cell({r:0, c:C})];
+    if (cell) {
+      cell.s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' } },
+        fill: { fgColor: { rgb: 'E53935' } },
+        alignment: { horizontal: 'center' }
+      };
+    }
+  }
+
+  // Thêm sheet hướng dẫn
+  const wsGuide = XLSX.utils.aoa_to_sheet([
+    ['📋 HƯỚNG DẪN ĐIỀN FILE MẪU'],
+    [''],
+    ['Cột','Giá trị hợp lệ','Ví dụ'],
+    ['Số Sim','Định dạng: 04 số . 3 số . 3 số','0912.345.678'],
+    ['Nhà Mạng','viettel | vinaphone | mobifone','viettel'],
+    ['Danh Mục','Phong Thủy | Tam Hoa | Tứ Quý | Lộc Phát | Thần Tài | Số lặp | Năm sinh | Sim VIP','Phong Thủy'],
+    ['Giá Bán','Số nguyên (VNĐ), không có dấu phẩy','500000'],
+    ['Gói Cước','Trả trước | Trả sau','Trả trước'],
+    ['Mệnh','kim | moc | thuy | hoa | tho','kim'],
+  ]);
+  wsGuide['!cols'] = [{wch:14},{wch:55},{wch:20}];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Danh sách Sim');
+  XLSX.utils.book_append_sheet(wb, wsGuide, 'Hướng dẫn');
+
+  XLSX.writeFile(wb, 'mau_import_sim.xlsx');
+  showToast('📊 Đã tải file mẫu Excel (.xlsx)!', 'success');
+}
+
+// CUSTOM CONFIRM (thay thế confirm() bị chặn bởi GitHub Pages)
+let confirmResolve = null;
+function showConfirm(title, msg, icon='🗑️', yesLabel='Xác nhận xóa') {
+  return new Promise(resolve => {
+    confirmResolve = (val) => {
+      document.getElementById('confirmOverlay').classList.remove('show');
+      resolve(val);
+    };
+    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMsg').textContent = msg;
+    document.getElementById('confirmYesBtn').textContent = yesLabel;
+    document.getElementById('confirmOverlay').classList.add('show');
+  });
+}
+
+// TOAST
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show '+(type||'');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Close modal on overlay click
+document.getElementById('simModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ===== ĐỔI MẬT KHẨU =====
+let currentAdminUser = '';
+
+function initPasswordTab() {
+  const input = document.getElementById('pwUser');
+  if (input) input.value = currentAdminUser;
+  renderAccountList();
+}
+
+function renderAccountList() {
+  const el = document.getElementById('accountList');
+  if (!el) return;
+  el.innerHTML = ADMIN_ACCOUNTS.map((a, i) => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f5f5f5;">
+      <div>
+        <div style="font-size:13px; font-weight:700; color:var(--dark);">👤 ${a.user}</div>
+        <div style="font-size:11px; color:var(--muted);">Mật khẩu: ${'●'.repeat(a.pass.length)}</div>
+      </div>
+      <span style="font-size:11px; background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:20px; font-weight:600;">
+        ${a.user === currentAdminUser ? '● Đang đăng nhập' : '● Hoạt động'}
+      </span>
+    </div>
+  `).join('');
+}
+
+function togglePw(id, el) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  if (input.type === 'password') { input.type = 'text'; el.textContent = '🙈'; }
+  else { input.type = 'password'; el.textContent = '👁️'; }
+}
+
+function checkPwStrength(val) {
+  const bar = document.getElementById('pwStrengthBar');
+  const fill = document.getElementById('pwStrengthFill');
+  const text = document.getElementById('pwStrengthText');
+  if (!val) { bar.style.display='none'; return; }
+  bar.style.display = 'block';
+  let score = 0;
+  if (val.length >= 6) score++;
+  if (val.length >= 10) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const levels = [
+    { w:'20%', color:'#e53935', label:'Rất yếu' },
+    { w:'40%', color:'#ff7043', label:'Yếu' },
+    { w:'60%', color:'#ffa726', label:'Trung bình' },
+    { w:'80%', color:'#66bb6a', label:'Mạnh' },
+    { w:'100%', color:'#2e7d32', label:'Rất mạnh 💪' },
+  ];
+  const lv = levels[Math.min(score, 4)];
+  fill.style.width = lv.w;
+  fill.style.background = lv.color;
+  text.textContent = 'Độ mạnh: ' + lv.label;
+  text.style.color = lv.color;
+}
+
+function savePassword() {
+  const current = document.getElementById('pwCurrent').value;
+  const newPw   = document.getElementById('pwNew').value;
+  const confirm = document.getElementById('pwConfirm').value;
+  const errEl   = document.getElementById('pwError');
+
+  const showErr = (msg) => {
+    errEl.textContent = '❌ ' + msg;
+    errEl.style.display = 'block';
+  };
+  errEl.style.display = 'none';
+
+  // Validate
+  if (!current) return showErr('Vui lòng nhập mật khẩu hiện tại!');
+  if (!newPw)   return showErr('Vui lòng nhập mật khẩu mới!');
+  if (!confirm) return showErr('Vui lòng xác nhận mật khẩu mới!');
+
+  // Kiểm tra mật khẩu hiện tại
+  const idx = ADMIN_ACCOUNTS.findIndex(a => a.user === currentAdminUser);
+  if (idx === -1) return showErr('Không tìm thấy tài khoản!');
+  if (ADMIN_ACCOUNTS[idx].pass !== current) return showErr('Mật khẩu hiện tại không đúng!');
+
+  // Kiểm tra mật khẩu mới
+  if (newPw.length < 6) return showErr('Mật khẩu mới phải có ít nhất 6 ký tự!');
+  if (newPw === current) return showErr('Mật khẩu mới phải khác mật khẩu hiện tại!');
+  if (newPw !== confirm) return showErr('Xác nhận mật khẩu không khớp!');
+
+  // Lưu mật khẩu mới
+  ADMIN_ACCOUNTS[idx].pass = newPw;
+
+  // Reset form
+  document.getElementById('pwCurrent').value = '';
+  document.getElementById('pwNew').value = '';
+  document.getElementById('pwConfirm').value = '';
+  document.getElementById('pwStrengthBar').style.display = 'none';
+  errEl.style.display = 'none';
+  renderAccountList();
+  showToast('✅ Đổi mật khẩu thành công! Lần sau dùng mật khẩu mới.', 'success');
+}
+
+
+</script>
+
+<!-- CUSTOM CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirmIcon">🗑️</div>
+    <h3 id="confirmTitle">Xác nhận xóa</h3>
+    <p id="confirmMsg">Bạn có chắc muốn thực hiện hành động này?</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm-no" onclick="confirmResolve(false)">Hủy</button>
+      <button class="btn-confirm-yes" id="confirmYesBtn" onclick="confirmResolve(true)">Xác nhận xóa</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
