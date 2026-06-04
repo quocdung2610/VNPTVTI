@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhầnMềm LọcSố Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --border:#30363d;--border2:#484f58;
+  --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --blue:#58a6ff;--blue2:#1f6feb;--blue3:#0d419d;
+  --green:#3fb950;--green2:#238636;--green3:#1a7f37;
+  --red:#f85149;--red2:#da3633;
+  --yellow:#d29922;--yellow2:#e3b341;
+  --purple:#bc8cff;--orange:#ffa657;
+  --accent:#58a6ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.app-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.app-title{font-weight:800;font-size:15px;color:var(--text);}
+.app-title span{color:var(--blue);}
+.app-version{font-size:10px;color:var(--text3);background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.btn-icon{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:6px;font-family:inherit;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s;}
+.btn-icon:hover{background:var(--bg4);border-color:var(--border2);color:var(--text);}
+.btn-primary{background:var(--blue2);border:1px solid var(--blue);color:#fff;padding:6px 14px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.btn-primary:hover{background:var(--blue);color:#000;}
+.btn-danger{background:var(--red2);border:1px solid var(--red);color:#fff;padding:6px 12px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-danger:hover{background:var(--red);}
+.btn-success{background:var(--green2);border:1px solid var(--green);color:#fff;padding:6px 12px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-success:hover{background:var(--green);}
+.btn-warning{background:#9e6a03;border:1px solid var(--yellow);color:var(--yellow2);padding:6px 12px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-warning:hover{background:var(--yellow2);color:#000;}
+
+/* MAIN LAYOUT */
+.main-layout{display:grid;grid-template-columns:240px 1fr 340px;height:calc(100vh - 44px);overflow:hidden;}
+
+/* LEFT PANEL - DẠNG SIM */
+.left-panel{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:8px;}
+.panel-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;padding:6px 4px 8px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+.dang-section{margin-bottom:10px;}
+.dang-section-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:4px 4px;display:flex;align-items:center;gap:4px;}
+.dang-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;}
+.dang-btn{padding:5px 4px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:10px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'JetBrains Mono',monospace;}
+.dang-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(88,166,255,0.1);}
+.dang-btn.active{background:rgba(88,166,255,0.15);border-color:var(--blue);color:var(--blue);}
+.dang-btn.full{grid-column:1/-1;}
+.dang-btn.half{grid-column:span 2;}
+
+/* CENTER PANEL */
+.center-panel{display:flex;flex-direction:column;overflow:hidden;}
+.center-tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;padding:0 12px;}
+.tab-btn{padding:10px 16px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;transition:all 0.15s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.center-toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.search-wrap{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;}
+.search-input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;}
+.search-input:focus{border-color:var(--blue);}
+.search-input::placeholder{color:var(--text3);}
+.filter-input{width:140px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;}
+.filter-input:focus{border-color:var(--blue);}
+
+/* SIM LIST */
+.sim-list-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.sim-list-header{background:var(--bg3);display:grid;grid-template-columns:40px 1fr 1fr 100px 80px 90px;border-bottom:1px solid var(--border);padding:6px 10px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;}
+.sim-list-body{flex:1;overflow-y:auto;}
+.sim-row{display:grid;grid-template-columns:40px 1fr 1fr 100px 80px 90px;padding:6px 10px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s;cursor:pointer;}
+.sim-row:hover{background:var(--bg3);}
+.sim-row.selected{background:rgba(88,166,255,0.08);border-left:2px solid var(--blue);}
+.sim-row .num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--text);}
+.sim-row .num .hi{color:var(--yellow2);}
+.mang-badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;}
+.viettel{background:rgba(63,185,80,0.15);color:var(--green);border:1px solid rgba(63,185,80,0.3);}
+.vinaphone{background:rgba(88,166,255,0.15);color:var(--blue);border:1px solid rgba(88,166,255,0.3);}
+.mobifone{background:rgba(248,81,73,0.15);color:var(--red);border:1px solid rgba(248,81,73,0.3);}
+.cat-tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;background:rgba(188,140,255,0.15);color:var(--purple);border:1px solid rgba(188,140,255,0.3);}
+.gia-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--orange);font-weight:600;}
+.row-actions{display:flex;gap:4px;opacity:0;}
+.sim-row:hover .row-actions{opacity:1;}
+.btn-row{background:var(--bg4);border:1px solid var(--border2);color:var(--text2);padding:3px 7px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;}
+.btn-row:hover{color:var(--text);background:var(--border2);}
+.btn-row-del{color:var(--red);border-color:rgba(248,81,73,0.3);}
+.btn-row-del:hover{background:rgba(248,81,73,0.15);}
+
+/* SIM LIST FOOTER */
+.sim-footer{background:var(--bg2);border-top:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sim-stats{display:flex;gap:16px;font-size:11px;color:var(--text3);}
+.sim-stats span{color:var(--text2);}
+.sim-stats strong{color:var(--text);font-family:'JetBrains Mono',monospace;}
+
+/* RIGHT PANEL */
+.right-panel{background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.right-tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;}
+.rtab{padding:8px 12px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;}
+.rtab:hover{color:var(--text);}
+.rtab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.right-content{flex:1;overflow-y:auto;padding:10px;}
+.rpanel{display:none;}
+.rpanel.active{display:block;}
+
+/* FILTER PANEL */
+.filter-section{margin-bottom:12px;}
+.filter-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.filter-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.ftag{padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'JetBrains Mono',monospace;}
+.ftag:hover{border-color:var(--blue);color:var(--blue);}
+.ftag.active{background:rgba(88,166,255,0.15);border-color:var(--blue);color:var(--blue);}
+.ftag.gold{border-color:rgba(210,153,34,0.4);color:var(--yellow);}
+.ftag.gold:hover,.ftag.gold.active{background:rgba(210,153,34,0.15);border-color:var(--yellow2);color:var(--yellow2);}
+.ftag.green{border-color:rgba(63,185,80,0.4);color:var(--green);}
+.ftag.green:hover,.ftag.green.active{background:rgba(63,185,80,0.15);border-color:var(--green);color:var(--green);}
+.range-row{display:flex;gap:6px;align-items:center;}
+.range-input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;}
+.range-input:focus{border-color:var(--blue);}
+.range-sep{color:var(--text3);font-size:11px;}
+
+/* UPLOAD PANEL */
+.upload-zone{border:2px dashed var(--border2);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:rgba(88,166,255,0.05);}
+.upload-zone .u-icon{font-size:32px;display:block;margin-bottom:8px;}
+.upload-zone h4{font-size:13px;font-weight:700;margin-bottom:4px;color:var(--text);}
+.upload-zone p{font-size:11px;color:var(--text3);}
+.paste-area{width:100%;min-height:100px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:vertical;line-height:1.6;}
+.paste-area:focus{border-color:var(--blue);}
+.paste-area::placeholder{color:var(--text3);}
+
+/* EDIT PANEL */
+.edit-form .form-row{margin-bottom:10px;}
+.edit-form label{display:block;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.edit-form input,.edit-form select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;}
+.edit-form input:focus,.edit-form select:focus{border-color:var(--blue);}
+.edit-form select option{background:var(--bg2);}
+
+/* RESULT PANEL */
+.result-list{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:var(--green);white-space:pre-wrap;word-break:break-all;}
+.result-stat{background:var(--bg3);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:11px;display:flex;gap:12px;flex-wrap:wrap;}
+.result-stat span{color:var(--text3);}
+.result-stat strong{color:var(--text);font-family:'JetBrains Mono',monospace;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--border2);}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px;border-radius:8px;font-size:12px;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.25s;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:5000;align-items:center;justify-content:center;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:24px;width:400px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.modal h3{font-size:14px;font-weight:800;margin-bottom:16px;color:var(--text);}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+
+/* CHECKBOX */
+.cb{accent-color:var(--blue);cursor:pointer;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3);}
+.empty-state .ei{font-size:40px;display:block;margin-bottom:10px;opacity:0.5;}
+
+/* SELECTED BAR */
+.selected-bar{display:none;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);border-radius:6px;padding:8px 12px;margin-bottom:8px;align-items:center;gap:10px;flex-wrap:wrap;}
+.selected-bar.show{display:flex;}
+.selected-bar span{font-size:12px;color:var(--blue);font-weight:600;}
+
+@media(max-width:900px){
+  .main-layout{grid-template-columns:1fr;height:auto;}
+  .left-panel{display:none;}
+  .right-panel{min-height:300px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="app-icon">🔢</div>
+    <div class="app-title">Lọc<span>Số</span>Pro</div>
+    <div class="app-version">v2.0</div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-icon" onclick="exportResult()">📤 Xuất Excel</button>
+    <button class="btn-icon" onclick="exportTxt()">📄 Xuất TXT</button>
+    <button class="btn-icon" onclick="copyAll()">📋 Copy tất cả</button>
+    <button class="btn-primary" onclick="openAddModal()">➕ Thêm số</button>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- LEFT: DẠNG SIM -->
+  <div class="left-panel">
+    <div class="panel-title">🎯 Dạng sim</div>
+
+    <div class="dang-section">
+      <div class="dang-section-label">⭐ Quý số</div>
+      <div class="dang-grid">
+        <div class="dang-btn" onclick="filterDang('luc-quy')">Lục quý</div>
+        <div class="dang-btn" onclick="filterDang('ngu-quy')">Ngũ quý</div>
+        <div class="dang-btn" onclick="filterDang('tu-quy')">Tứ quý</div>
+        <div class="dang-btn half" onclick="filterDang('tam-hoa-kep')">Tam hoa kép</div>
+        <div class="dang-btn" onclick="filterDang('tam-hoa-don')">Tam hoa đơn</div>
+        <div class="dang-btn" onclick="filterDang('so-lap')">Số lặp</div>
+        <div class="dang-btn" onclick="filterDang('dao-kep')">Đảo kép</div>
+        <div class="dang-btn" onclick="filterDang('dao-don')">Đảo đơn</div>
+      </div>
+    </div>
+
+    <div class="dang-section">
+      <div class="dang-section-label">📈 Tiến số</div>
+      <div class="dang-grid">
+        <div class="dang-btn full" onclick="filterDang('tien-3-doi')">Tiến 3 đôi</div>
+        <div class="dang-btn half" onclick="filterDang('tien-don-th')">Tiến đơn (TH)</div>
+        <div class="dang-btn" onclick="filterDang('tien-db')">Tiến ĐB</div>
+        <div class="dang-btn" onclick="filterDang('tien3')">Tiến đơn 3</div>
+        <div class="dang-btn" onclick="filterDang('tien4')">Tiến đơn 4</div>
+        <div class="dang-btn" onclick="filterDang('tien5')">Tiến đơn 5</div>
+      </div>
+    </div>
+
+    <div class="dang-section">
+      <div class="dang-section-label">🔄 Đặc biệt</div>
+      <div class="dang-grid">
+        <div class="dang-btn" onclick="filterDang('phat-loc')">Phát lộc</div>
+        <div class="dang-btn" onclick="filterDang('loc-phat')">Lộc phát</div>
+        <div class="dang-btn" onclick="filterDang('cuu-cuu')">Cửu cửu</div>
+        <div class="dang-btn" onclick="filterDang('loc-loc')">Lộc lộc</div>
+        <div class="dang-btn" onclick="filterDang('phat-phat')">Phát phát</div>
+        <div class="dang-btn" onclick="filterDang('than-tai')">Thần tài</div>
+        <div class="dang-btn" onclick="filterDang('nam-sinh')">Năm sinh</div>
+        <div class="dang-btn" onclick="filterDang('so-kep')">Số kép TH</div>
+        <div class="dang-btn" onclick="filterDang('so-doi')">Số đôi</div>
+      </div>
+    </div>
+
+    <div class="dang-section">
+      <div class="dang-section-label">🔣 Dạng số</div>
+      <div class="dang-grid">
+        <div class="dang-btn" onclick="filterDang('AABB')">AA.BB</div>
+        <div class="dang-btn" onclick="filterDang('ABCC')">AB.CC</div>
+        <div class="dang-btn" onclick="filterDang('AABC')">AA.BC</div>
+        <div class="dang-btn" onclick="filterDang('ABAB')">AB.AB</div>
+        <div class="dang-btn" onclick="filterDang('ABBA')">AB.BA</div>
+        <div class="dang-btn" onclick="filterDang('ABCD')">AB.CD</div>
+        <div class="dang-btn" onclick="filterDang('AAAA')">AAAA.b</div>
+        <div class="dang-btn" onclick="filterDang('ABxAB')">AB.xAB</div>
+        <div class="dang-btn" onclick="filterDang('xBBAA')">xBB.AA</div>
+      </div>
+    </div>
+
+    <div class="dang-section">
+      <div class="dang-section-label">🗑️ Xóa bộ lọc</div>
+      <div class="dang-grid">
+        <div class="dang-btn full" style="border-color:rgba(248,81,73,0.4);color:var(--red);" onclick="clearAllFilters()">✕ Xóa tất cả bộ lọc</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: DANH SÁCH SIM -->
+  <div class="center-panel">
+    <div class="center-tabs">
+      <button class="tab-btn active" onclick="switchCenterTab('list',this)">📋 Danh sách số</button>
+      <button class="tab-btn" onclick="switchCenterTab('result',this)">✅ Kết quả lọc (<span id="resultCount">0</span>)</button>
+    </div>
+    <div class="center-toolbar">
+      <div class="search-wrap">
+        <span style="color:var(--text3);font-size:12px;">🔍</span>
+        <input class="search-input" id="searchInput" placeholder="Tìm số sim... (VD: *888, 0912*)" oninput="applyAllFilters()">
+      </div>
+      <input class="filter-input" id="filterDauSo" placeholder="Đầu số..." oninput="applyAllFilters()">
+      <input class="filter-input" id="filterDuoiSo" placeholder="Đuôi số..." oninput="applyAllFilters()">
+      <button class="btn-icon" onclick="selectAll()">☑ Chọn tất cả</button>
+      <button class="btn-icon" onclick="clearSelect()">✕ Bỏ chọn</button>
+    </div>
+
+    <div class="sim-list-wrap" id="simListWrap">
+      <!-- LIST TAB -->
+      <div id="ctab-list" class="sim-list-wrap" style="display:flex;flex-direction:column;overflow:hidden;">
+        <div class="sim-list-header">
+          <div><input type="checkbox" class="cb" id="cbAll" onclick="toggleAllCb(this)"></div>
+          <div>Số sim</div>
+          <div>Danh mục</div>
+          <div>Nhà mạng</div>
+          <div>Giá</div>
+          <div>Thao tác</div>
+        </div>
+        <div class="selected-bar" id="selectedBar">
+          <span>✅ Đã chọn <span id="selectedCount">0</span> số</span>
+          <button class="btn-danger" onclick="deleteSelected()">🗑️ Xóa đã chọn</button>
+          <button class="btn-success" onclick="moveToResult()">→ Chuyển sang kết quả</button>
+          <button class="btn-icon" onclick="copySelected()">📋 Copy đã chọn</button>
+          <button class="btn-icon" onclick="clearSelect()">✕ Bỏ chọn</button>
+        </div>
+        <div class="sim-list-body" id="simListBody"></div>
+      </div>
+      <!-- RESULT TAB -->
+      <div id="ctab-result" style="display:none;flex:1;overflow-y:auto;padding:12px;">
+        <div class="result-stat" id="resultStat"></div>
+        <div class="result-list" id="resultList"></div>
+        <div class="empty-state" id="resultEmpty"><span class="ei">📭</span><p>Chưa có kết quả lọc.<br>Chọn số và nhấn "Chuyển sang kết quả".</p></div>
+      </div>
+    </div>
+
+    <div class="sim-footer">
+      <div class="sim-stats">
+        <div><span>Tổng: </span><strong id="totalCount">0</strong></div>
+        <div><span>Đang lọc: </span><strong id="filteredCount">0</strong></div>
+        <div><span>Đã chọn: </span><strong id="footerSelected">0</strong></div>
+        <div><span>Kết quả: </span><strong id="footerResult">0</strong></div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-icon" onclick="prevPage()">‹</button>
+        <span id="pageInfo" style="padding:6px 8px;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;"></span>
+        <button class="btn-icon" onclick="nextPage()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: TOOLS -->
+  <div class="right-panel">
+    <div class="right-tabs">
+      <button class="rtab active" onclick="switchRTab('upload',this)">📤 Upload</button>
+      <button class="rtab" onclick="switchRTab('filter',this)">🔧 Bộ lọc</button>
+      <button class="rtab" onclick="switchRTab('edit',this)">✏️ Sửa số</button>
+      <button class="rtab" onclick="switchRTab('stats',this)">📊 Thống kê</button>
+    </div>
+    <div class="right-content">
+
+      <!-- UPLOAD -->
+      <div class="rpanel active" id="rpanel-upload">
+        <div class="filter-label">📁 Upload file số</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+          <span class="u-icon">📂</span>
+          <h4>Kéo thả hoặc click</h4>
+          <p>Excel (.xlsx), CSV (.csv), TXT (.txt)</p>
+        </div>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.txt" style="display:none" onchange="handleFileUpload(event)">
+
+        <div class="filter-label" style="margin-top:12px;">📋 Dán danh sách số</div>
+        <textarea class="paste-area" id="pasteArea" placeholder="Dán số điện thoại vào đây&#10;Mỗi số 1 dòng&#10;VD:&#10;0912345678&#10;0988111222&#10;0914789789"></textarea>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button class="btn-primary" style="flex:1;" onclick="importPaste()">✅ Import số</button>
+          <button class="btn-icon" onclick="document.getElementById('pasteArea').value=''">✕</button>
+        </div>
+
+        <div class="filter-label" style="margin-top:12px;">⚡ Thêm nhanh</div>
+        <div style="display:flex;gap:6px;margin-bottom:6px;">
+          <input class="search-input" id="quickAdd" placeholder="Nhập số sim..." style="flex:1;" onkeypress="if(event.key==='Enter')quickAddSim()">
+          <button class="btn-success" onclick="quickAddSim()">➕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+          <select id="quickMang" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:inherit;font-size:11px;outline:none;">
+            <option value="viettel">Viettel</option>
+            <option value="vinaphone">Vinaphone</option>
+            <option value="mobifone">Mobifone</option>
+            <option value="gmobile">Gmobile</option>
+            <option value="reddi">Reddi</option>
+          </select>
+          <select id="quickCat" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-family:inherit;font-size:11px;outline:none;">
+            <option>Lục quý</option><option>Ngũ quý</option><option>Tứ quý</option>
+            <option>Tam hoa</option><option>Số lặp</option><option>Đảo kép</option>
+            <option>Tiến số</option><option>Lộc phát</option><option>Thần tài</option>
+            <option>Năm sinh</option><option>Thường</option>
+          </select>
+        </div>
+        <div style="margin-top:6px;">
+          <input class="search-input" id="quickGia" type="number" placeholder="Giá (VNĐ)..." style="width:100%;">
+        </div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="rpanel" id="rpanel-filter">
+        <div class="filter-section">
+          <div class="filter-label">📡 Nhà mạng</div>
+          <div class="filter-tags" id="fMang">
+            <span class="ftag active" data-val="">Tất cả</span>
+            <span class="ftag green" data-val="viettel">Viettel</span>
+            <span class="ftag" data-val="vinaphone">Vinaphone</span>
+            <span class="ftag" data-val="mobifone">Mobifone</span>
+            <span class="ftag" data-val="gmobile">Gmobile</span>
+            <span class="ftag" data-val="reddi">Reddi</span>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">🏷️ Danh mục</div>
+          <div class="filter-tags" id="fCat">
+            <span class="ftag active" data-val="">Tất cả</span>
+            <span class="ftag" data-val="Lục quý">Lục quý</span>
+            <span class="ftag" data-val="Ngũ quý">Ngũ quý</span>
+            <span class="ftag" data-val="Tứ quý">Tứ quý</span>
+            <span class="ftag" data-val="Tam hoa">Tam hoa</span>
+            <span class="ftag" data-val="Số lặp">Số lặp</span>
+            <span class="ftag" data-val="Đảo kép">Đảo kép</span>
+            <span class="ftag" data-val="Tiến số">Tiến số</span>
+            <span class="ftag" data-val="Lộc phát">Lộc phát</span>
+            <span class="ftag" data-val="Thần tài">Thần tài</span>
+            <span class="ftag" data-val="Năm sinh">Năm sinh</span>
+            <span class="ftag" data-val="Thường">Thường</span>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">💰 Khoảng giá (VNĐ)</div>
+          <div class="range-row">
+            <input class="range-input" id="fGiaMin" type="number" placeholder="Từ..." oninput="applyAllFilters()">
+            <span class="range-sep">—</span>
+            <input class="range-input" id="fGiaMax" type="number" placeholder="Đến..." oninput="applyAllFilters()">
+          </div>
+          <div class="filter-tags" style="margin-top:6px;" id="fGia">
+            <span class="ftag gold active" data-val="0-99999999">Tất cả</span>
+            <span class="ftag gold" data-val="0-500000">≤500K</span>
+            <span class="ftag gold" data-val="0-1000000">≤1tr</span>
+            <span class="ftag gold" data-val="0-5000000">≤5tr</span>
+            <span class="ftag gold" data-val="0-10000000">≤10tr</span>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">🔢 Chứa số</div>
+          <div class="filter-tags" id="fDigit">
+            <span class="ftag active" data-val="">Tất cả</span>
+            <span class="ftag" data-val="0">0</span><span class="ftag" data-val="1">1</span>
+            <span class="ftag" data-val="2">2</span><span class="ftag" data-val="3">3</span>
+            <span class="ftag" data-val="4">4</span><span class="ftag" data-val="5">5</span>
+            <span class="ftag" data-val="6">6</span><span class="ftag" data-val="7">7</span>
+            <span class="ftag" data-val="8">8</span><span class="ftag" data-val="9">9</span>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">❌ Bỏ số chứa</div>
+          <div class="filter-tags" id="fExclude">
+            <span class="ftag" data-val="0">0</span><span class="ftag" data-val="1">1</span>
+            <span class="ftag" data-val="2">2</span><span class="ftag" data-val="3">3</span>
+            <span class="ftag" data-val="4">4</span><span class="ftag" data-val="5">5</span>
+          </div>
+        </div>
+        <button class="btn-danger" style="width:100%;margin-top:4px;" onclick="resetFilters()">↺ Xóa bộ lọc</button>
+      </div>
+
+      <!-- EDIT -->
+      <div class="rpanel" id="rpanel-edit">
+        <div id="editHint" style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">👆 Click vào một số để sửa</div>
+        <div id="editForm" style="display:none;">
+          <div class="edit-form">
+            <div class="form-row"><label>Số sim</label><input type="text" id="editSo" placeholder="0912.345.678"></div>
+            <div class="form-row"><label>Nhà mạng</label>
+              <select id="editMang"><option value="viettel">Viettel</option><option value="vinaphone">Vinaphone</option><option value="mobifone">Mobifone</option><option value="gmobile">Gmobile</option><option value="reddi">Reddi</option></select>
+            </div>
+            <div class="form-row"><label>Danh mục</label>
+              <select id="editCat"><option>Lục quý</option><option>Ngũ quý</option><option>Tứ quý</option><option>Tam hoa</option><option>Số lặp</option><option>Đảo kép</option><option>Tiến số</option><option>Lộc phát</option><option>Thần tài</option><option>Năm sinh</option><option>Thường</option></select>
+            </div>
+            <div class="form-row"><label>Giá bán (VNĐ)</label><input type="number" id="editGia" placeholder="500000"></div>
+            <div class="form-row"><label>Ghi chú</label><input type="text" id="editNote" placeholder="Ghi chú..."></div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+              <button class="btn-primary" style="flex:1;" onclick="saveEdit()">💾 Lưu</button>
+              <button class="btn-icon" onclick="cancelEdit()">✕</button>
+              <button class="btn-danger" onclick="deleteEditing()">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="rpanel" id="rpanel-stats">
+        <div id="statsContent" style="font-size:12px;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-bg" id="addModal">
+  <div class="modal">
+    <h3>➕ Thêm số sim mới</h3>
+    <div class="edit-form">
+      <div class="form-row"><label>Số sim *</label><input type="text" id="newSo" placeholder="VD: 0912345678"></div>
+      <div class="form-row"><label>Nhà mạng</label><select id="newMang"><option value="viettel">Viettel</option><option value="vinaphone">Vinaphone</option><option value="mobifone">Mobifone</option><option value="gmobile">Gmobile</option><option value="reddi">Reddi</option></select></div>
+      <div class="form-row"><label>Danh mục</label><select id="newCat"><option>Lục quý</option><option>Ngũ quý</option><option>Tứ quý</option><option>Tam hoa</option><option>Số lặp</option><option>Đảo kép</option><option>Tiến số</option><option>Lộc phát</option><option>Thần tài</option><option>Năm sinh</option><option>Thường</option></select></div>
+      <div class="form-row"><label>Giá bán (VNĐ)</label><input type="number" id="newGia" placeholder="500000"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-icon" onclick="closeAddModal()">Hủy</button>
+      <button class="btn-primary" onclick="addNewSim()">➕ Thêm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+let allSims = [
+  {id:1,so:'0912888999',mang:'viettel',cat:'Lục quý',gia:45000000,note:''},
+  {id:2,so:'0988666888',mang:'viettel',cat:'Tam hoa',gia:8500000,note:''},
+  {id:3,so:'0914789789',mang:'vinaphone',cat:'Đảo kép',gia:3200000,note:''},
+  {id:4,so:'0908199199',mang:'mobifone',cat:'Năm sinh',gia:1500000,note:''},
+  {id:5,so:'0912456456',mang:'viettel',cat:'Số lặp',gia:2800000,note:''},
+  {id:6,so:'0989777888',mang:'vinaphone',cat:'Thần tài',gia:15000000,note:''},
+  {id:7,so:'0366868686',mang:'viettel',cat:'Lộc phát',gia:9900000,note:''},
+  {id:8,so:'0799999666',mang:'mobifone',cat:'Ngũ quý',gia:22000000,note:''},
+  {id:9,so:'0918123456',mang:'vinaphone',cat:'Tiến số',gia:4500000,note:''},
+  {id:10,so:'0362880000',mang:'viettel',cat:'Tứ quý',gia:35000000,note:''},
+  {id:11,so:'0905888866',mang:'mobifone',cat:'Tứ quý',gia:18000000,note:''},
+  {id:12,so:'0913369369',mang:'vinaphone',cat:'Đảo kép',gia:6800000,note:''},
+  {id:13,so:'0986198888',mang:'viettel',cat:'Năm sinh',gia:2200000,note:''},
+  {id:14,so:'0939686868',mang:'mobifone',cat:'Lộc phát',gia:12500000,note:''},
+  {id:15,so:'0912000099',mang:'viettel',cat:'Số lặp',gia:28000000,note:''},
+  {id:16,so:'0338999888',mang:'viettel',cat:'Tam hoa',gia:7600000,note:''},
+  {id:17,so:'0914200000',mang:'vinaphone',cat:'Năm sinh',gia:1800000,note:''},
+  {id:18,so:'0906789012',mang:'mobifone',cat:'Tiến số',gia:3900000,note:''},
+  {id:19,so:'0977778888',mang:'viettel',cat:'Thần tài',gia:19500000,note:''},
+  {id:20,so:'0888666999',mang:'vinaphone',cat:'Ngũ quý',gia:16000000,note:''},
+];
+let nextId = 21;
+let filtered = [...allSims];
+let selectedIds = new Set();
+let resultSims = [];
+let editingId = null;
+let currentPage = 1;
+const perPage = 50;
+let activeDang = null;
+let activeFilters = {mang:'',cat:'',giaMin:0,giaMax:99999999,digit:'',exclude:[],gia:'0-99999999'};
+
+// ===== FORMAT =====
+function formatSo(s){
+  const d=s.replace(/\D/g,'');
+  if(d.length===10)return d.slice(0,4)+'.'+d.slice(4,7)+'.'+d.slice(7);
+  if(d.length===11)return d.slice(0,4)+'.'+d.slice(4,8)+'.'+d.slice(8);
+  return s;
+}
+function formatPrice(n){
+  if(n>=1000000)return (n/1000000).toFixed(n%1000000===0?0:1)+' triệu';
+  if(n>=1000)return Math.round(n/1000)+'K';
+  return n.toLocaleString('vi-VN')+'đ';
+}
+function getMangClass(m){return {viettel:'viettel',vinaphone:'vinaphone',mobifone:'mobifone',gmobile:'viettel',reddi:'vinaphone'}[m]||'';}
+function getMangLabel(m){return {viettel:'Viettel',vinaphone:'Vinaphone',mobifone:'Mobifone',gmobile:'Gmobile',reddi:'Reddi'}[m]||m;}
+
+// ===== SIM PATTERN DETECTION =====
+function detectDang(so){
+  const d=so.replace(/\D/g,'').slice(-8);
+  const cats=[];
+  // Lục quý: 6 số giống nhau liên tiếp
+  if(/(.)\1{5}/.test(d))cats.push('luc-quy');
+  // Ngũ quý: 5 số giống nhau
+  if(/(.)\1{4}/.test(d))cats.push('ngu-quy');
+  // Tứ quý: 4 số giống nhau
+  if(/(.)\1{3}/.test(d))cats.push('tu-quy');
+  // Tam hoa
+  if(/(.)\1{2}/.test(d))cats.push('tam-hoa');
+  // Đảo kép AB.BA
+  const a=d.slice(4,6),b=d.slice(6,8);
+  if(a[0]===b[1]&&a[1]===b[0])cats.push('dao-kep');
+  // Số lặp AB.AB
+  if(d.slice(4,6)===d.slice(6,8))cats.push('so-lap');
+  // Tiến số
+  const digits=d.split('').map(Number);
+  let inc=true,dec=true;
+  for(let i=1;i<digits.length;i++){if(digits[i]!==digits[i-1]+1)inc=false;if(digits[i]!==digits[i-1]-1)dec=false;}
+  if(inc||dec)cats.push('tien-so');
+  // Lộc phát 689
+  if(d.includes('689')||d.includes('968'))cats.push('loc-phat');
+  // Thần tài 79
+  if(d.includes('79')||d.includes('97'))cats.push('than-tai');
+  return cats;
+}
+
+function matchesDang(sim,dang){
+  if(!dang)return true;
+  const d=sim.so.replace(/\D/g,'');
+  const last=d.slice(-8);
+  const last4=d.slice(-4);
+  const last6=d.slice(-6);
+  switch(dang){
+    case 'luc-quy':return /(.)\1{5}/.test(last);
+    case 'ngu-quy':return /(.)\1{4}/.test(last)&&!/(.)\1{5}/.test(last);
+    case 'tu-quy':return /(.)\1{3}/.test(last)&&!/(.)\1{4}/.test(last);
+    case 'tam-hoa-kep':return /(.)\1{2}/.test(last)&&/(.)\1{2}/.test(last.slice(last.lastIndexOf(last.match(/(.)\1{2}/)[0])));
+    case 'tam-hoa-don':return /(.)\1{2}/.test(last);
+    case 'so-lap':return d.slice(-4,-2)===d.slice(-2);
+    case 'dao-kep':{const a=d.slice(-4,-2),b=d.slice(-2);return a[0]===b[1]&&a[1]===b[0];}
+    case 'dao-don':{return d.slice(-3,-2)===d.slice(-1);}
+    case 'tien-3-doi':{const p=[d.slice(-6,-4),d.slice(-4,-2),d.slice(-2)];return p[0]!==p[1]&&p[1]!==p[2]&&parseInt(p[1])===parseInt(p[0])+1&&parseInt(p[2])===parseInt(p[1])+1;}
+    case 'phat-loc':return last.includes('689')||last.includes('386');
+    case 'loc-phat':return last.includes('689')||last.includes('968');
+    case 'cuu-cuu':return last.includes('99')||last.includes('999');
+    case 'loc-loc':return (last.match(/6/g)||[]).length>=3;
+    case 'phat-phat':return (last.match(/8/g)||[]).length>=3;
+    case 'than-tai':return last.includes('79')||last.includes('97');
+    case 'nam-sinh':return /19[5-9]\d|200[0-9]|201[0-5]/.test(d);
+    case 'so-kep':return /(.)\1/.test(last4);
+    case 'so-doi':return /(.)(?:.*)\1/.test(last4);
+    case 'AABB':return last4[0]===last4[1]&&last4[2]===last4[3]&&last4[0]!==last4[2];
+    case 'ABCC':return last4[2]===last4[3]&&last4[0]!==last4[2];
+    case 'AABC':return last4[0]===last4[1]&&last4[1]!==last4[2];
+    case 'ABAB':return last4[0]===last4[2]&&last4[1]===last4[3];
+    case 'ABBA':return last4[0]===last4[3]&&last4[1]===last4[2];
+    case 'ABCD':return last4[0]!==last4[1]&&last4[1]!==last4[2]&&last4[2]!==last4[3];
+    case 'AAAA':return /(.)\1{3}/.test(last4);
+    case 'ABxAB':return last[2]===last[5]&&last[3]===last[6]&&last[2]!==last[0];
+    case 'xBBAA':return last.slice(-2)===last.slice(-4,-2)&&last.slice(-2)!==last.slice(-6,-4).slice(-2);
+    default:return true;
+  }
+}
+
+// ===== FILTER ENGINE =====
+function applyAllFilters(){
+  const q=(document.getElementById('searchInput').value||'').replace(/\./g,'').replace(/\*/g,'.*').replace(/\?/g,'.');
+  const dauSo=(document.getElementById('filterDauSo').value||'').replace(/\D/g,'');
+  const duoiSo=(document.getElementById('filterDuoiSo').value||'').replace(/\D/g,'');
+  const giaMin=parseInt(document.getElementById('fGiaMin').value)||0;
+  const giaMax=parseInt(document.getElementById('fGiaMax').value)||activeFilters.giaMax;
+
+  filtered=allSims.filter(s=>{
+    const d=s.so.replace(/\D/g,'');
+    // Search
+    let matchQ=true;
+    if(q){try{matchQ=new RegExp(q).test(d);}catch(e){matchQ=d.includes(q);}}
+    // Đầu số
+    const matchDau=!dauSo||d.startsWith(dauSo);
+    // Đuôi số
+    const matchDuoi=!duoiSo||d.endsWith(duoiSo);
+    // Nhà mạng
+    const matchMang=!activeFilters.mang||s.mang===activeFilters.mang;
+    // Danh mục
+    const matchCat=!activeFilters.cat||s.cat===activeFilters.cat;
+    // Giá
+    const gMax=giaMax||activeFilters.giaMax;
+    const matchGia=s.gia>=giaMin&&s.gia<=gMax;
+    // Chứa số
+    const matchDigit=!activeFilters.digit||d.includes(activeFilters.digit);
+    // Bỏ số
+    const matchExclude=activeFilters.exclude.every(ex=>!d.includes(ex));
+    // Dạng sim
+    const matchDang=matchesDang(s,activeDang);
+
+    return matchQ&&matchDau&&matchDuoi&&matchMang&&matchCat&&matchGia&&matchDigit&&matchExclude&&matchDang;
+  });
+
+  currentPage=1;
+  renderList();
+}
+
+function filterDang(dang){
+  activeDang = activeDang===dang?null:dang;
+  document.querySelectorAll('.dang-btn').forEach(b=>b.classList.remove('active'));
+  if(activeDang){
+    const btns=document.querySelectorAll('.dang-btn');
+    btns.forEach(b=>{if(b.getAttribute('onclick')===`filterDang('${dang}')`)b.classList.add('active');});
+  }
+  applyAllFilters();
+}
+
+function clearAllFilters(){
+  activeDang=null;
+  activeFilters={mang:'',cat:'',giaMin:0,giaMax:99999999,digit:'',exclude:[],gia:'0-99999999'};
+  document.querySelectorAll('.dang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ftag').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#fMang .ftag:first-child,#fCat .ftag:first-child,#fGia .ftag:first-child,#fDigit .ftag:first-child').forEach(t=>t.classList.add('active'));
+  document.getElementById('searchInput').value='';
+  document.getElementById('filterDauSo').value='';
+  document.getElementById('filterDuoiSo').value='';
+  document.getElementById('fGiaMin').value='';
+  document.getElementById('fGiaMax').value='';
+  applyAllFilters();
+  showToast('✅ Đã xóa tất cả bộ lọc','success');
+}
+
+function resetFilters(){clearAllFilters();}
+
+// ===== RENDER =====
+function renderList(){
+  const start=(currentPage-1)*perPage;
+  const page=filtered.slice(start,start+perPage);
+  const body=document.getElementById('simListBody');
+
+  if(page.length===0){
+    body.innerHTML='<div class="empty-state"><span class="ei">🔍</span><p>Không tìm thấy số nào.<br>Thử thay đổi bộ lọc.</p></div>';
+  } else {
+    body.innerHTML=page.map(s=>{
+      const isSel=selectedIds.has(s.id);
+      const dispSo=formatSo(s.so);
+      // Highlight số quý
+      const d=s.so.replace(/\D/g,'');
+      let hiSo=dispSo;
+      const quyMatch=d.match(/(.)\1{2,}/);
+      if(quyMatch){hiSo=dispSo.replace(new RegExp(quyMatch[0].split('').join('\\.?'),'g'),m=>`<span class="hi">${m}</span>`);}
+      return `<div class="sim-row${isSel?' selected':''}" id="row_${s.id}">
+        <div><input type="checkbox" class="cb" ${isSel?'checked':''} onclick="toggleSel(${s.id},this)"></div>
+        <div class="num">${hiSo}</div>
+        <div><span class="cat-tag">${s.cat}</span></div>
+        <div><span class="mang-badge ${getMangClass(s.mang)}">${getMangLabel(s.mang)}</span></div>
+        <div class="gia-text">${formatPrice(s.gia)}</div>
+        <div class="row-actions">
+          <button class="btn-row" onclick="startEdit(${s.id});event.stopPropagation()">✏️</button>
+          <button class="btn-row btn-row-del" onclick="deleteSim(${s.id});event.stopPropagation()">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Update counts
+  document.getElementById('totalCount').textContent=allSims.length;
+  document.getElementById('filteredCount').textContent=filtered.length;
+  document.getElementById('footerSelected').textContent=selectedIds.size;
+  document.getElementById('footerResult').textContent=resultSims.length;
+  document.getElementById('resultCount').textContent=resultSims.length;
+
+  // Pagination
+  const total=Math.ceil(filtered.length/perPage);
+  document.getElementById('pageInfo').textContent=`${currentPage}/${Math.max(1,total)}`;
+
+  // Selected bar
+  document.getElementById('selectedBar').classList.toggle('show',selectedIds.size>0);
+  document.getElementById('selectedCount').textContent=selectedIds.size;
+  document.getElementById('footerSelected').textContent=selectedIds.size;
+
+  // cbAll sync
+  const cbs=document.querySelectorAll('#simListBody .cb');
+  const cbAll=document.getElementById('cbAll');
+  if(cbAll&&cbs.length>0)cbAll.checked=[...cbs].every(c=>c.checked);
+}
+
+// ===== SELECTION =====
+function toggleSel(id,cb){
+  if(cb.checked)selectedIds.add(id);
+  else selectedIds.delete(id);
+  const row=document.getElementById('row_'+id);
+  if(row)row.classList.toggle('selected',cb.checked);
+  document.getElementById('selectedBar').classList.toggle('show',selectedIds.size>0);
+  document.getElementById('selectedCount').textContent=selectedIds.size;
+  document.getElementById('footerSelected').textContent=selectedIds.size;
+}
+function toggleAllCb(cb){
+  const page=filtered.slice((currentPage-1)*perPage,currentPage*perPage);
+  page.forEach(s=>{
+    if(cb.checked)selectedIds.add(s.id);
+    else selectedIds.delete(s.id);
+  });
+  renderList();
+}
+function selectAll(){
+  filtered.forEach(s=>selectedIds.add(s.id));
+  renderList();
+  showToast(`✅ Đã chọn ${selectedIds.size} số`,'success');
+}
+function clearSelect(){
+  selectedIds.clear();
+  renderList();
+}
+
+// ===== CRUD =====
+function deleteSim(id){
+  allSims=allSims.filter(s=>s.id!==id);
+  selectedIds.delete(id);
+  resultSims=resultSims.filter(s=>s.id!==id);
+  applyAllFilters();
+  showToast('🗑️ Đã xóa số','success');
+  if(editingId===id)cancelEdit();
+}
+function deleteSelected(){
+  if(selectedIds.size===0)return;
+  const cnt=selectedIds.size;
+  allSims=allSims.filter(s=>!selectedIds.has(s.id));
+  resultSims=resultSims.filter(s=>!selectedIds.has(s.id));
+  selectedIds.clear();
+  applyAllFilters();
+  showToast(`🗑️ Đã xóa ${cnt} số`,'success');
+}
+function moveToResult(){
+  if(selectedIds.size===0){showToast('Chưa chọn số nào!','error');return;}
+  const toMove=allSims.filter(s=>selectedIds.has(s.id));
+  toMove.forEach(s=>{if(!resultSims.find(r=>r.id===s.id))resultSims.push(s);});
+  renderResultPanel();
+  selectedIds.clear();
+  renderList();
+  showToast(`✅ Đã chuyển ${toMove.length} số sang kết quả`,'success');
+}
+function openAddModal(){
+  document.getElementById('newSo').value='';
+  document.getElementById('newGia').value='';
+  document.getElementById('addModal').classList.add('show');
+  setTimeout(()=>document.getElementById('newSo').focus(),100);
+}
+function closeAddModal(){document.getElementById('addModal').classList.remove('show');}
+function addNewSim(){
+  const so=document.getElementById('newSo').value.replace(/\D/g,'');
+  if(!so||so.length<9){showToast('Số sim không hợp lệ!','error');return;}
+  const gia=parseInt(document.getElementById('newGia').value)||0;
+  allSims.push({id:nextId++,so,mang:document.getElementById('newMang').value,cat:document.getElementById('newCat').value,gia,note:''});
+  closeAddModal();
+  applyAllFilters();
+  showToast('✅ Đã thêm số mới','success');
+}
+function quickAddSim(){
+  const so=document.getElementById('quickAdd').value.replace(/\D/g,'');
+  if(!so||so.length<9){showToast('Số không hợp lệ!','error');return;}
+  const gia=parseInt(document.getElementById('quickGia').value)||0;
+  allSims.push({id:nextId++,so,mang:document.getElementById('quickMang').value,cat:document.getElementById('quickCat').value,gia,note:''});
+  document.getElementById('quickAdd').value='';
+  document.getElementById('quickGia').value='';
+  applyAllFilters();
+  showToast('✅ Đã thêm '+formatSo(so),'success');
+}
+
+// EDIT
+function startEdit(id){
+  const s=allSims.find(x=>x.id===id);
+  if(!s)return;
+  editingId=id;
+  document.getElementById('editHint').style.display='none';
+  document.getElementById('editForm').style.display='block';
+  document.getElementById('editSo').value=formatSo(s.so);
+  document.getElementById('editMang').value=s.mang;
+  document.getElementById('editCat').value=s.cat;
+  document.getElementById('editGia').value=s.gia;
+  document.getElementById('editNote').value=s.note||'';
+  switchRTab('edit',document.querySelectorAll('.rtab')[2]);
+}
+function saveEdit(){
+  if(!editingId)return;
+  const s=allSims.find(x=>x.id===editingId);
+  if(!s)return;
+  const newSo=document.getElementById('editSo').value.replace(/\D/g,'');
+  if(!newSo){showToast('Số sim không hợp lệ!','error');return;}
+  s.so=newSo;s.mang=document.getElementById('editMang').value;s.cat=document.getElementById('editCat').value;
+  s.gia=parseInt(document.getElementById('editGia').value)||0;s.note=document.getElementById('editNote').value;
+  applyAllFilters();
+  showToast('✅ Đã lưu '+formatSo(newSo),'success');
+}
+function cancelEdit(){editingId=null;document.getElementById('editHint').style.display='block';document.getElementById('editForm').style.display='none';}
+function deleteEditing(){if(editingId){deleteSim(editingId);editingId=null;}}
+
+// ===== IMPORT =====
+function importPaste(){
+  const text=document.getElementById('pasteArea').value;
+  if(!text.trim()){showToast('Chưa có dữ liệu!','error');return;}
+  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l);
+  let added=0;
+  lines.forEach(line=>{
+    const nums=line.match(/0\d{9,10}/g);
+    if(nums){nums.forEach(n=>{
+      const so=n.replace(/\D/g,'');
+      if(!allSims.find(s=>s.so===so)){
+        allSims.push({id:nextId++,so,mang:detectMang(so),cat:detectCatAuto(so),gia:0,note:''});
+        added++;
+      }
+    });}
+  });
+  document.getElementById('pasteArea').value='';
+  applyAllFilters();
+  showToast(`✅ Đã import ${added} số mới`,'success');
+}
+function detectMang(so){
+  const d=so.replace(/\D/g,'');
+  const vt=['032','033','034','035','036','037','038','039','086','096','097','098'];
+  const vna=['081','082','083','084','085','088','091','094'];
+  const mfn=['070','076','077','078','079','089','090','093'];
+  const pre3=d.slice(0,3);
+  if(vt.includes(pre3))return 'viettel';
+  if(vna.includes(pre3))return 'vinaphone';
+  if(mfn.includes(pre3))return 'mobifone';
+  return 'viettel';
+}
+function detectCatAuto(so){
+  const cats=detectDang(so);
+  if(cats.includes('luc-quy'))return 'Lục quý';
+  if(cats.includes('ngu-quy'))return 'Ngũ quý';
+  if(cats.includes('tu-quy'))return 'Tứ quý';
+  if(cats.includes('tam-hoa'))return 'Tam hoa';
+  if(cats.includes('so-lap'))return 'Số lặp';
+  if(cats.includes('dao-kep'))return 'Đảo kép';
+  if(cats.includes('tien-so'))return 'Tiến số';
+  if(cats.includes('loc-phat'))return 'Lộc phát';
+  if(cats.includes('than-tai'))return 'Thần tài';
+  return 'Thường';
+}
+function handleFileUpload(e){const f=e.target.files[0];if(f)processFile(f);e.target.value='';}
+function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function processFile(file){
+  const name=file.name.toLowerCase();
+  if(name.endsWith('.txt')){
+    const r=new FileReader();r.onload=e=>{document.getElementById('pasteArea').value=e.target.result;importPaste();};r.readAsText(file,'utf-8');
+  } else if(name.endsWith('.csv')){
+    const r=new FileReader();r.onload=e=>{
+      const lines=e.target.result.split('\n');let added=0;
+      lines.forEach(line=>{const parts=line.split(',');const so=(parts[0]||'').replace(/\D/g,'');if(so.length>=9&&!allSims.find(s=>s.so===so)){allSims.push({id:nextId++,so,mang:parts[1]?.trim()||detectMang(so),cat:parts[2]?.trim()||detectCatAuto(so),gia:parseInt(parts[3])||0,note:''});added++;}});
+      applyAllFilters();showToast(`✅ Import ${added} số từ CSV`,'success');
+    };r.readAsText(file,'utf-8');
+  } else {
+    if(typeof XLSX==='undefined'){
+      const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=()=>_readXLSX(file);document.head.appendChild(s);
+    } else _readXLSX(file);
+  }
+}
+function _readXLSX(file){
+  const r=new FileReader();r.onload=e=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+      let added=0;
+      rows.forEach(row=>{
+        const so=String(row['Số'||'so'||'SĐT'||'Phone']||Object.values(row)[0]||'').replace(/\D/g,'');
+        if(so.length>=9&&!allSims.find(s=>s.so===so)){
+          allSims.push({id:nextId++,so,mang:String(row['Nhà mạng']||row['mang']||detectMang(so)).toLowerCase(),cat:String(row['Danh mục']||row['cat']||detectCatAuto(so)),gia:parseInt(row['Giá']||row['gia']||0)||0,note:''});
+          added++;
+        }
+      });
+      applyAllFilters();showToast(`✅ Import ${added} số từ Excel`,'success');
+    }catch(err){showToast('Lỗi đọc file: '+err.message,'error');}
+  };r.readAsArrayBuffer(file);
+}
+
+// ===== EXPORT =====
+function exportTxt(){
+  const data=resultSims.length>0?resultSims:filtered;
+  const text=data.map(s=>formatSo(s.so)).join('\n');
+  download('danh-sach-so.txt',text,'text/plain');
+  showToast(`✅ Xuất ${data.length} số TXT`,'success');
+}
+function exportResult(){
+  if(typeof XLSX==='undefined'){
+    const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=_exportXLSX;document.head.appendChild(s);
+  } else _exportXLSX();
+}
+function _exportXLSX(){
+  const data=resultSims.length>0?resultSims:filtered;
+  const rows=[['Số Sim','Nhà Mạng','Danh Mục','Giá','Ghi Chú'],...data.map(s=>[formatSo(s.so),getMangLabel(s.mang),s.cat,s.gia,s.note||''])];
+  const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=[{wch:16},{wch:12},{wch:12},{wch:12},{wch:20}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Danh sách số');
+  XLSX.writeFile(wb,'danh-sach-so.xlsx');
+  showToast(`✅ Xuất ${data.length} số Excel`,'success');
+}
+function copyAll(){
+  const data=resultSims.length>0?resultSims:filtered;
+  navigator.clipboard.writeText(data.map(s=>formatSo(s.so)).join('\n')).then(()=>showToast(`📋 Đã copy ${data.length} số`,'success'));
+}
+function copySelected(){
+  const data=allSims.filter(s=>selectedIds.has(s.id));
+  navigator.clipboard.writeText(data.map(s=>formatSo(s.so)).join('\n')).then(()=>showToast(`📋 Đã copy ${data.length} số`,'success'));
+}
+function download(name,content,type){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();
+}
+
+// ===== RESULT PANEL =====
+function renderResultPanel(){
+  const el=document.getElementById('resultList');
+  const empty=document.getElementById('resultEmpty');
+  const stat=document.getElementById('resultStat');
+  document.getElementById('resultCount').textContent=resultSims.length;
+  document.getElementById('footerResult').textContent=resultSims.length;
+  if(resultSims.length===0){el.textContent='';stat.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const byMang={};resultSims.forEach(s=>{byMang[s.mang]=(byMang[s.mang]||0)+1;});
+  stat.innerHTML=`<span>Tổng: <strong>${resultSims.length}</strong></span>`+Object.entries(byMang).map(([m,c])=>`<span>${getMangLabel(m)}: <strong>${c}</strong></span>`).join('');
+  el.textContent=resultSims.map(s=>formatSo(s.so)).join('\n');
+}
+
+// ===== STATS =====
+function renderStats(){
+  const el=document.getElementById('statsContent');
+  const byMang={},byCat={};
+  allSims.forEach(s=>{byMang[s.mang]=(byMang[s.mang]||0)+1;byCat[s.cat]=(byCat[s.cat]||0)+1;});
+  const totalGia=allSims.reduce((a,s)=>a+s.gia,0);
+  el.innerHTML=`
+    <div style="margin-bottom:12px;">
+      <div class="filter-label">📊 Tổng quan</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--blue);font-family:'JetBrains Mono',monospace;">${allSims.length}</div><div style="font-size:10px;color:var(--text3);">Tổng số</div></div>
+        <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace;">${filtered.length}</div><div style="font-size:10px;color:var(--text3);">Đang lọc</div></div>
+        <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace;">${formatPrice(totalGia)}</div><div style="font-size:10px;color:var(--text3);">Tổng giá trị</div></div>
+        <div style="background:var(--bg3);border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--purple);font-family:'JetBrains Mono',monospace;">${resultSims.length}</div><div style="font-size:10px;color:var(--text3);">Kết quả</div></div>
+      </div>
+    </div>
+    <div class="filter-label">📡 Nhà mạng</div>
+    ${Object.entries(byMang).map(([m,c])=>{const pct=Math.round(c/allSims.length*100);return `<div style="margin-bottom:6px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:var(--text2)">${getMangLabel(m)}</span><span style="color:var(--text3);font-family:'JetBrains Mono',monospace;">${c} (${pct}%)</span></div><div style="height:4px;background:var(--bg4);border-radius:2px;"><div style="height:4px;background:var(--blue);border-radius:2px;width:${pct}%;"></div></div></div>`;}).join('')}
+    <div class="filter-label" style="margin-top:10px;">🏷️ Danh mục</div>
+    ${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:11px;"><span style="color:var(--text2)">${c}</span><span style="color:var(--text3);font-family:'JetBrains Mono',monospace;">${n}</span></div>`).join('')}
+  `;
+}
+
+// ===== TABS =====
+function switchCenterTab(tab,el){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ctab-list').style.display=tab==='list'?'flex':'none';
+  document.getElementById('ctab-result').style.display=tab==='result'?'block':'none';
+  if(tab==='result')renderResultPanel();
+}
+function switchRTab(tab,el){
+  if(!el)el=document.querySelector(`.rtab:nth-child(${['upload','filter','edit','stats'].indexOf(tab)+1})`);
+  document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rpanel').forEach(p=>p.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const panel=document.getElementById('rpanel-'+tab);
+  if(panel)panel.classList.add('active');
+  if(tab==='stats')renderStats();
+}
+
+// ===== FTAG CLICK ENGINE =====
+document.addEventListener('click',function(e){
+  if(!e.target.classList.contains('ftag'))return;
+  const group=e.target.closest('.filter-tags');
+  if(!group)return;
+  const gid=group.id;
+  const isExclude=(gid==='fExclude');
+  if(isExclude){
+    e.target.classList.toggle('active');
+    activeFilters.exclude=[...document.querySelectorAll('#fExclude .ftag.active')].map(t=>t.dataset.val);
+  } else {
+    document.querySelectorAll('#'+gid+' .ftag').forEach(t=>t.classList.remove('active'));
+    e.target.classList.add('active');
+    const val=e.target.dataset.val||'';
+    if(gid==='fMang')activeFilters.mang=val;
+    else if(gid==='fCat')activeFilters.cat=val;
+    else if(gid==='fDigit')activeFilters.digit=val;
+    else if(gid==='fGia'){
+      const[mn,mx]=val.split('-').map(Number);
+      activeFilters.giaMax=mx;
+      document.getElementById('fGiaMax').value=mx<99999999?mx:'';
+    }
+  }
+  applyAllFilters();
+});
+
+// ===== PAGINATION =====
+function prevPage(){if(currentPage>1){currentPage--;renderList();}}
+function nextPage(){const total=Math.ceil(filtered.length/perPage);if(currentPage<total){currentPage++;renderList();}}
+
+// ===== TOAST =====
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+(type||'');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){document.getElementById('addModal').classList.remove('show');}
+  if(e.ctrlKey&&e.key==='a'){e.preventDefault();selectAll();}
+  if(e.ctrlKey&&e.key==='f'){e.preventDefault();document.getElementById('searchInput').focus();}
+});
+document.getElementById('addModal').addEventListener('click',function(e){if(e.target===this)closeAddModal();});
+
+// ===== INIT =====
+applyAllFilters();
+</script>
+</body>
+</html>
